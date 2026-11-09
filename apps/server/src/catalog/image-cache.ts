@@ -80,7 +80,7 @@ export const createImageCache = ({ cards, cacheDir }: ImageCacheDeps): ImageCach
       const card = CardIdSchema.safeParse(cardId).success ? cards.findById(cardId) : undefined;
       if (!card) return err({ code: 'CARD_NOT_FOUND', cardId });
 
-      const input = { artSeed: card.artSeed, affinityIdentity: card.affinityIdentity };
+      const input = { artSeed: card.artSeed, affinityIdentity: card.affinityIdentity, typeLine: card.typeLine, keywords: card.keywords };
       const fingerprint = artFingerprint(input);
       const expected: CardImagePaths = {
         normalPath: join(cacheDir, imageFileName(card.id, fingerprint, 'normal')),

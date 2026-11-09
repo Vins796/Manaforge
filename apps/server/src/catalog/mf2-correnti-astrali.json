@@ -1,0 +1,840 @@
+{
+  "schemaVersion": 1,
+  "block": {
+    "code": "MF2",
+    "name": "Correnti Astrali"
+  },
+  "cards": [
+    {
+      "id": "MF2-001",
+      "name": "Guado Perlaceo",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Entra in campo esaurita. Esaurisci: aggiungi {A} o {M}.",
+      "rarity": "non_comune",
+      "artSeed": "guado-perlaceo"
+    },
+    {
+      "id": "MF2-002",
+      "name": "Grotta delle Maree Nere",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Entra in campo esaurita. Esaurisci: aggiungi {M} o {O}.",
+      "rarity": "non_comune",
+      "artSeed": "grotta-delle-maree-nere"
+    },
+    {
+      "id": "MF2-003",
+      "name": "Forra Cinerea",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Entra in campo esaurita. Esaurisci: aggiungi {O} o {F}.",
+      "rarity": "non_comune",
+      "artSeed": "forra-cinerea"
+    },
+    {
+      "id": "MF2-004",
+      "name": "Pendio Incandescente",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Entra in campo esaurita. Esaurisci: aggiungi {F} o {S}.",
+      "rarity": "non_comune",
+      "artSeed": "pendio-incandescente"
+    },
+    {
+      "id": "MF2-005",
+      "name": "Prato del Meriggio",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Entra in campo esaurita. Esaurisci: aggiungi {S} o {A}.",
+      "rarity": "non_comune",
+      "artSeed": "prato-del-meriggio"
+    },
+    {
+      "id": "MF2-006",
+      "name": "Novizia del Tempio",
+      "cost": "{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Chierico"
+      ],
+      "power": 1,
+      "toughness": 1,
+      "keywords": [
+        "LINFA"
+      ],
+      "rarity": "comune",
+      "artSeed": "novizia-del-tempio"
+    },
+    {
+      "id": "MF2-007",
+      "name": "Lanciere della Rocca",
+      "cost": "{1}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Soldato"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "SENTINELLA"
+      ],
+      "rarity": "comune",
+      "artSeed": "lanciere-della-rocca"
+    },
+    {
+      "id": "MF2-008",
+      "name": "Falco Aurorale",
+      "cost": "{1}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Uccello"
+      ],
+      "power": 1,
+      "toughness": 1,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "comune",
+      "artSeed": "falco-aurorale"
+    },
+    {
+      "id": "MF2-009",
+      "name": "Araldo del Mezzodì",
+      "cost": "{2}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Araldo"
+      ],
+      "rulesText": "Quando entra in campo, guadagni 3 punti vita.",
+      "power": 2,
+      "toughness": 3,
+      "rarity": "comune",
+      "artSeed": "araldo-del-mezzodi"
+    },
+    {
+      "id": "MF2-010",
+      "name": "Giustiziera dell'Alba",
+      "cost": "{3}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Cavaliere"
+      ],
+      "power": 3,
+      "toughness": 3,
+      "keywords": [
+        "FULMINEO",
+        "EGIDA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "giustiziera-dell-alba"
+    },
+    {
+      "id": "MF2-011",
+      "name": "Custode Alato del Faro",
+      "cost": "{3}{A}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spirito",
+        "Custode"
+      ],
+      "power": 4,
+      "toughness": 4,
+      "keywords": [
+        "ALATO",
+        "SENTINELLA"
+      ],
+      "rarity": "rara",
+      "artSeed": "custode-alato-del-faro"
+    },
+    {
+      "id": "MF2-012",
+      "name": "Scudo di Luce",
+      "cost": "{A}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene Egida fino alla fine del turno. Pesca una carta.",
+      "rarity": "comune",
+      "artSeed": "scudo-di-luce"
+    },
+    {
+      "id": "MF2-013",
+      "name": "Chiamata alle Armi",
+      "cost": "{2}{A}",
+      "type": "Rituale",
+      "rulesText": "Crea due pedine creatura Soldato 1/1 di affinità Alba.",
+      "rarity": "comune",
+      "artSeed": "chiamata-alle-armi"
+    },
+    {
+      "id": "MF2-014",
+      "name": "Condanna Radiante",
+      "cost": "{3}{A}",
+      "type": "Rapido",
+      "rulesText": "Esilia la creatura attaccante o bloccante bersaglio.",
+      "rarity": "non_comune",
+      "artSeed": "condanna-radiante"
+    },
+    {
+      "id": "MF2-015",
+      "name": "Alba Purificatrice",
+      "cost": "{4}{A}{A}",
+      "type": "Rituale",
+      "rulesText": "Distruggi tutte le creature.",
+      "rarity": "rara",
+      "artSeed": "alba-purificatrice"
+    },
+    {
+      "id": "MF2-016",
+      "name": "Nuotatrice delle Secche",
+      "cost": "{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Tritone"
+      ],
+      "rulesText": "Quando entra in campo, guarda la prima carta del tuo mazzo. Puoi metterla in fondo al mazzo.",
+      "power": 1,
+      "toughness": 2,
+      "rarity": "comune",
+      "artSeed": "nuotatrice-delle-secche"
+    },
+    {
+      "id": "MF2-017",
+      "name": "Medusa Luminosa",
+      "cost": "{1}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Medusa"
+      ],
+      "power": 0,
+      "toughness": 4,
+      "keywords": [
+        "VEDETTA"
+      ],
+      "rarity": "comune",
+      "artSeed": "medusa-luminosa"
+    },
+    {
+      "id": "MF2-018",
+      "name": "Airone di Brina",
+      "cost": "{2}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Uccello"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "comune",
+      "artSeed": "airone-di-brina"
+    },
+    {
+      "id": "MF2-019",
+      "name": "Mago delle Nebbie",
+      "cost": "{2}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Mago"
+      ],
+      "rulesText": "Quando entra in campo, fai tornare la creatura bersaglio nella mano del suo proprietario.",
+      "power": 2,
+      "toughness": 2,
+      "rarity": "non_comune",
+      "artSeed": "mago-delle-nebbie"
+    },
+    {
+      "id": "MF2-020",
+      "name": "Elementale della Corrente",
+      "cost": "{3}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Elementale"
+      ],
+      "power": 3,
+      "toughness": 4,
+      "keywords": [
+        "FULMINEO"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "elementale-della-corrente"
+    },
+    {
+      "id": "MF2-021",
+      "name": "Leviatano delle Profondità",
+      "cost": "{5}{M}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Leviatano"
+      ],
+      "power": 7,
+      "toughness": 7,
+      "keywords": [
+        "EGIDA"
+      ],
+      "rarity": "mitica",
+      "artSeed": "leviatano-delle-profondita"
+    },
+    {
+      "id": "MF2-022",
+      "name": "Diluvio di Pensieri",
+      "cost": "{2}{M}",
+      "type": "Rapido",
+      "rulesText": "Pesca due carte.",
+      "rarity": "comune",
+      "artSeed": "diluvio-di-pensieri"
+    },
+    {
+      "id": "MF2-023",
+      "name": "Velo di Bruma",
+      "cost": "{M}",
+      "type": "Rapido",
+      "rulesText": "Annulla la magia bersaglio a meno che il suo controllore paghi {2}.",
+      "rarity": "comune",
+      "artSeed": "velo-di-bruma"
+    },
+    {
+      "id": "MF2-024",
+      "name": "Gelo Paralizzante",
+      "cost": "{1}{M}",
+      "type": "Rituale",
+      "rulesText": "Esaurisci la creatura bersaglio. Non si ristora durante il prossimo Mantenimento del suo controllore.",
+      "rarity": "comune",
+      "artSeed": "gelo-paralizzante"
+    },
+    {
+      "id": "MF2-025",
+      "name": "Marea Cognitiva",
+      "cost": "{1}{M}{M}",
+      "type": "Rituale",
+      "rulesText": "Pesca tre carte, poi scarta una carta.",
+      "rarity": "non_comune",
+      "artSeed": "marea-cognitiva"
+    },
+    {
+      "id": "MF2-026",
+      "name": "Ratto delle Fogne",
+      "cost": "{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Ratto"
+      ],
+      "rulesText": "Quando muore, pesca una carta.",
+      "power": 1,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "ratto-delle-fogne"
+    },
+    {
+      "id": "MF2-027",
+      "name": "Accolito del Velo",
+      "cost": "{1}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Accolito"
+      ],
+      "power": 2,
+      "toughness": 1,
+      "keywords": [
+        "LINFA"
+      ],
+      "rarity": "comune",
+      "artSeed": "accolito-del-velo"
+    },
+    {
+      "id": "MF2-028",
+      "name": "Pipistrello Cinereo",
+      "cost": "{1}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Pipistrello"
+      ],
+      "power": 1,
+      "toughness": 1,
+      "keywords": [
+        "ALATO",
+        "LINFA"
+      ],
+      "rarity": "comune",
+      "artSeed": "pipistrello-cinereo"
+    },
+    {
+      "id": "MF2-029",
+      "name": "Cavaliere Senza Luce",
+      "cost": "{2}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Cavaliere"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "FENDENTE",
+        "VELENO"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "cavaliere-senza-luce"
+    },
+    {
+      "id": "MF2-030",
+      "name": "Golem di Ossa",
+      "cost": "{3}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Golem"
+      ],
+      "rulesText": "Golem di Ossa non può bloccare.",
+      "power": 4,
+      "toughness": 3,
+      "rarity": "comune",
+      "artSeed": "golem-di-ossa"
+    },
+    {
+      "id": "MF2-031",
+      "name": "Sovrano del Vuoto",
+      "cost": "{4}{O}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Demone"
+      ],
+      "rulesText": "Quando entra in campo, sacrifica un'altra creatura.",
+      "power": 6,
+      "toughness": 6,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "mitica",
+      "artSeed": "sovrano-del-vuoto"
+    },
+    {
+      "id": "MF2-032",
+      "name": "Morso dell'Eclissi",
+      "cost": "{O}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene -2/-2 fino alla fine del turno.",
+      "rarity": "comune",
+      "artSeed": "morso-dell-eclissi"
+    },
+    {
+      "id": "MF2-033",
+      "name": "Esumazione",
+      "cost": "{2}{O}",
+      "type": "Rituale",
+      "rulesText": "Fai tornare la carta creatura bersaglio dal tuo cimitero alla tua mano.",
+      "rarity": "comune",
+      "artSeed": "esumazione"
+    },
+    {
+      "id": "MF2-034",
+      "name": "Condanna Eterna",
+      "cost": "{3}{O}",
+      "type": "Rapido",
+      "rulesText": "Distruggi la creatura bersaglio.",
+      "rarity": "non_comune",
+      "artSeed": "condanna-eterna"
+    },
+    {
+      "id": "MF2-035",
+      "name": "Raccolto di Anime",
+      "cost": "{2}{O}{O}",
+      "type": "Rituale",
+      "rulesText": "Ogni giocatore sacrifica due creature.",
+      "rarity": "rara",
+      "artSeed": "raccolto-di-anime"
+    },
+    {
+      "id": "MF2-036",
+      "name": "Salamandra delle Braci",
+      "cost": "{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Salamandra"
+      ],
+      "rulesText": "{F}: Salamandra delle Braci ottiene +1/+0 fino alla fine del turno.",
+      "power": 1,
+      "toughness": 2,
+      "rarity": "comune",
+      "artSeed": "salamandra-delle-braci"
+    },
+    {
+      "id": "MF2-037",
+      "name": "Berserker della Forgia",
+      "cost": "{1}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Berserker"
+      ],
+      "power": 3,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "berserker-della-forgia"
+    },
+    {
+      "id": "MF2-038",
+      "name": "Segugio delle Ceneri",
+      "cost": "{2}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Segugio"
+      ],
+      "power": 3,
+      "toughness": 2,
+      "keywords": [
+        "SCATTO"
+      ],
+      "rarity": "comune",
+      "artSeed": "segugio-delle-ceneri"
+    },
+    {
+      "id": "MF2-039",
+      "name": "Duellante Scarlatta",
+      "cost": "{2}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Duellante"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "DOPPIO_FENDENTE"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "duellante-scarlatta"
+    },
+    {
+      "id": "MF2-040",
+      "name": "Fenice del Vespro",
+      "cost": "{3}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Fenice"
+      ],
+      "power": 3,
+      "toughness": 2,
+      "keywords": [
+        "ALATO",
+        "SCATTO"
+      ],
+      "rarity": "rara",
+      "artSeed": "fenice-del-vespro"
+    },
+    {
+      "id": "MF2-041",
+      "name": "Gigante del Magma",
+      "cost": "{4}{F}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Gigante"
+      ],
+      "power": 6,
+      "toughness": 4,
+      "keywords": [
+        "SFONDAMENTO"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "gigante-del-magma"
+    },
+    {
+      "id": "MF2-042",
+      "name": "Colpo di Fornace",
+      "cost": "{1}{F}",
+      "type": "Rituale",
+      "rulesText": "Colpo di Fornace infligge 4 danni alla creatura bersaglio.",
+      "rarity": "comune",
+      "artSeed": "colpo-di-fornace"
+    },
+    {
+      "id": "MF2-043",
+      "name": "Furore Incontenibile",
+      "cost": "{F}",
+      "type": "Rapido",
+      "rulesText": "Le creature che controlli ottengono +1/+0 e Scatto fino alla fine del turno.",
+      "rarity": "non_comune",
+      "artSeed": "furore-incontenibile"
+    },
+    {
+      "id": "MF2-044",
+      "name": "Saccheggio Avventato",
+      "cost": "{1}{F}",
+      "type": "Rituale",
+      "rulesText": "Scarta una carta, poi pesca due carte.",
+      "rarity": "comune",
+      "artSeed": "saccheggio-avventato"
+    },
+    {
+      "id": "MF2-045",
+      "name": "Eruzione Furente",
+      "cost": "{3}{F}{F}",
+      "type": "Rituale",
+      "rulesText": "Eruzione Furente infligge 5 danni a qualsiasi bersaglio.",
+      "rarity": "rara",
+      "artSeed": "eruzione-furente"
+    },
+    {
+      "id": "MF2-046",
+      "name": "Scoiattolo Raccoglitore",
+      "cost": "{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Scoiattolo"
+      ],
+      "rulesText": "Quando entra in campo, guadagni 2 punti vita.",
+      "power": 1,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "scoiattolo-raccoglitore"
+    },
+    {
+      "id": "MF2-047",
+      "name": "Cervo Ramificato",
+      "cost": "{1}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Cervo"
+      ],
+      "power": 2,
+      "toughness": 3,
+      "rarity": "comune",
+      "artSeed": "cervo-ramificato"
+    },
+    {
+      "id": "MF2-048",
+      "name": "Ragno delle Chiome",
+      "cost": "{2}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Ragno"
+      ],
+      "power": 2,
+      "toughness": 4,
+      "keywords": [
+        "VEDETTA"
+      ],
+      "rarity": "comune",
+      "artSeed": "ragno-delle-chiome"
+    },
+    {
+      "id": "MF2-049",
+      "name": "Orso delle Querce",
+      "cost": "{2}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Orso"
+      ],
+      "power": 4,
+      "toughness": 2,
+      "rarity": "comune",
+      "artSeed": "orso-delle-querce"
+    },
+    {
+      "id": "MF2-050",
+      "name": "Custode della Foresta",
+      "cost": "{3}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Elementale"
+      ],
+      "rulesText": "Quando entra in campo, guadagni 3 punti vita.",
+      "power": 3,
+      "toughness": 5,
+      "keywords": [
+        "VEDETTA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "custode-della-foresta"
+    },
+    {
+      "id": "MF2-051",
+      "name": "Idra Primordiale",
+      "cost": "{3}{S}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Idra"
+      ],
+      "power": 5,
+      "toughness": 5,
+      "keywords": [
+        "SFONDAMENTO",
+        "EGIDA"
+      ],
+      "rarity": "rara",
+      "artSeed": "idra-primordiale"
+    },
+    {
+      "id": "MF2-052",
+      "name": "Crescita Rigogliosa",
+      "cost": "{S}",
+      "type": "Rituale",
+      "rulesText": "Cerca nel tuo mazzo una Fonte base, rivelala e mettila nella tua mano. Poi rimescola il mazzo.",
+      "rarity": "comune",
+      "artSeed": "crescita-rigogliosa"
+    },
+    {
+      "id": "MF2-053",
+      "name": "Scontro Selvaggio",
+      "cost": "{1}{S}",
+      "type": "Rituale",
+      "rulesText": "La creatura bersaglio che controlli infligge danni pari alla sua forza alla creatura bersaglio che non controlli.",
+      "rarity": "comune",
+      "artSeed": "scontro-selvaggio"
+    },
+    {
+      "id": "MF2-054",
+      "name": "Pelle di Corteccia",
+      "cost": "{S}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene +2/+2 ed Egida fino alla fine del turno.",
+      "rarity": "non_comune",
+      "artSeed": "pelle-di-corteccia"
+    },
+    {
+      "id": "MF2-055",
+      "name": "Risveglio Ancestrale",
+      "cost": "{4}{S}{S}",
+      "type": "Rituale",
+      "rulesText": "Le creature che controlli ottengono +3/+3 e Sfondamento fino alla fine del turno.",
+      "rarity": "rara",
+      "artSeed": "risveglio-ancestrale"
+    },
+    {
+      "id": "MF2-056",
+      "name": "Guardiano di Ferro",
+      "cost": "{4}",
+      "type": "Creatura",
+      "subtypes": [
+        "Costrutto"
+      ],
+      "power": 3,
+      "toughness": 4,
+      "keywords": [
+        "VEDETTA"
+      ],
+      "rarity": "comune",
+      "artSeed": "guardiano-di-ferro"
+    },
+    {
+      "id": "MF2-057",
+      "name": "Colosso Meccanico",
+      "cost": "{6}",
+      "type": "Creatura",
+      "subtypes": [
+        "Costrutto"
+      ],
+      "power": 6,
+      "toughness": 6,
+      "rarity": "non_comune",
+      "artSeed": "colosso-meccanico"
+    },
+    {
+      "id": "MF2-058",
+      "name": "Bussola Arcana",
+      "cost": "{1}",
+      "type": "Artefatto",
+      "rulesText": "Esaurisci, sacrifica Bussola Arcana: cerca nel tuo mazzo una Fonte base e mettila nella tua mano. Poi rimescola il mazzo.",
+      "rarity": "comune",
+      "artSeed": "bussola-arcana"
+    },
+    {
+      "id": "MF2-059",
+      "name": "Corona del Forgiatore",
+      "cost": "{3}",
+      "type": "Artefatto",
+      "rulesText": "Le creature che controlli ottengono +1/+1.",
+      "rarity": "rara",
+      "artSeed": "corona-del-forgiatore"
+    },
+    {
+      "id": "MF2-060",
+      "name": "Oracolo Perlaceo",
+      "cost": "{1}{A}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spirito",
+        "Veggente"
+      ],
+      "rulesText": "Quando entra in campo, pesca una carta.",
+      "power": 2,
+      "toughness": 3,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "oracolo-perlaceo"
+    },
+    {
+      "id": "MF2-061",
+      "name": "Negromante degli Abissi",
+      "cost": "{2}{M}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Negromante"
+      ],
+      "rulesText": "Quando entra in campo, l'avversario bersaglio scarta una carta.",
+      "power": 3,
+      "toughness": 3,
+      "rarity": "non_comune",
+      "artSeed": "negromante-degli-abissi"
+    },
+    {
+      "id": "MF2-062",
+      "name": "Diavolo della Forra",
+      "cost": "{O}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Diavolo"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "SCATTO",
+        "LINFA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "diavolo-della-forra"
+    },
+    {
+      "id": "MF2-063",
+      "name": "Bestia del Vulcano Verde",
+      "cost": "{2}{F}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Bestia"
+      ],
+      "power": 5,
+      "toughness": 4,
+      "keywords": [
+        "SFONDAMENTO"
+      ],
+      "rarity": "rara",
+      "artSeed": "bestia-del-vulcano-verde"
+    },
+    {
+      "id": "MF2-064",
+      "name": "Druido dell'Aurora",
+      "cost": "{1}{S}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Druido"
+      ],
+      "rulesText": "Quando entra in campo, guadagni 2 punti vita.",
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "LINFA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "druido-dell-aurora"
+    }
+  ]
+}

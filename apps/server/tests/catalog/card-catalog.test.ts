@@ -1,7 +1,7 @@
 /**
  * @nature [TEST]
  * @module CardCatalogTest
- * @description Verifica caricamento, validazione, conflitti tra blocchi e versione (hash) del catalogo, incluso il blocco reale MF1.
+ * @description Verifica caricamento, validazione, conflitti tra blocchi e versione (hash) del catalogo, inclusi i blocchi reali MF1 e MF2.
  * @relatedDocs docs/catalog/TEST/04-catalog-tests.md
  * @testFile apps/server/tests/catalog/card-catalog.test.ts
  */
@@ -10,12 +10,15 @@ import { KEYWORD_CODES, SOURCE_TYPES, unwrap } from '@manaforge/shared';
 import { computeCatalogVersion, loadBundledCatalog, parseCatalogSources } from '../../src/catalog/card-catalog.js';
 import { TEST_CARDS, loadTestCatalog, testCatalogSource } from '../helpers/catalog-fixtures.js';
 
-describe('catalogo distribuito (MF1 — Prima Fusione)', () => {
+describe('catalogo distribuito (MF1 — Prima Fusione, MF2 — Correnti Astrali)', () => {
   const catalog = unwrap(loadBundledCatalog());
 
   it('è valido, ordinato per id e con versione stabile', () => {
-    expect(catalog.blocks).toEqual([{ code: 'MF1', name: 'Prima Fusione' }]);
-    expect(catalog.records.length).toBeGreaterThanOrEqual(40);
+    expect(catalog.blocks).toEqual([
+      { code: 'MF1', name: 'Prima Fusione' },
+      { code: 'MF2', name: 'Correnti Astrali' },
+    ]);
+    expect(catalog.records.length).toBe(48 + 64);
     const ids = catalog.records.map((card) => card.id);
     expect(ids).toEqual([...ids].sort());
     expect(catalog.version).toMatch(/^v1-[0-9a-f]{16}$/);
@@ -27,6 +30,18 @@ describe('catalogo distribuito (MF1 — Prima Fusione)', () => {
     expect(sources.map((card) => card.affinityIdentity)).toEqual([['A'], ['M'], ['O'], ['F'], ['S']]);
     const used = new Set(catalog.records.flatMap((card) => card.keywords));
     expect([...used].sort()).toEqual([...KEYWORD_CODES].sort());
+  });
+
+  it('MF2 aggiunge una Fonte doppia per ogni coppia di affinità alleate, nessuna nuova Fonte base, e usa tutte le parole chiave', () => {
+    const mf2 = catalog.records.filter((card) => card.id.startsWith('MF2-'));
+    expect(mf2).toHaveLength(64);
+    expect(mf2.filter((card) => card.typeLine.startsWith('Fonte base'))).toEqual([]);
+    const duals = mf2.filter((card) => card.typeLine === 'Fonte').map((card) => card.affinityIdentity.join(''));
+    expect(duals).toEqual(['AM', 'MO', 'OF', 'FS', 'AS']);
+    expect(new Set(mf2.flatMap((card) => card.keywords)).size).toBe(KEYWORD_CODES.length);
+    for (const code of ['A', 'M', 'O', 'F', 'S'] as const) {
+      expect(mf2.filter((card) => card.affinityIdentity.length === 1 && card.affinityIdentity[0] === code).length, code).toBeGreaterThanOrEqual(10);
+    }
   });
 
   it('include le carte citate dai documenti di regole', () => {
