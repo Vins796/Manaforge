@@ -45,6 +45,14 @@ email già collegata ad altro Google → `GOOGLE_ACCOUNT_CONFLICT`; email non ve
 | Server solo su `127.0.0.1`, CORS a whitelist, body ≤ 16 KiB, errori 500 senza dettagli | `config.ts`, `app.ts` |
 | Client: CSP senza `eval` (Zod `jitless`), solo URL `https:` aperti esternamente | `index.html`, `zod-config.ts`, `external-browser.ts` |
 
+## Configurazione delle credenziali Google
+1. Google Cloud Console → Google Auth Platform: schermata di consenso **Esterno**, utenti di test, client **"App desktop"**
+   (nessun redirect da registrare: il loopback `127.0.0.1` è ammesso su qualsiasi porta).
+2. `pnpm --filter @manaforge/server google:setup <client_secret.json>` → `auth/google-credentials.ts` valida il JSON
+   (rifiuta i client "Applicazione web") e scrive/aggiorna `MANAFORGE_GOOGLE_CLIENT_ID` e `MANAFORGE_GOOGLE_CLIENT_SECRET`
+   in `apps/server/.env` (0600, altre righe preservate). Modello: `apps/server/.env.example`.
+3. `pnpm --filter @manaforge/server start` avvia il server con `--env-file-if-exists=.env`.
+
 ## Limiti noti
 - Il JWT è salvato in `localStorage` del WebView: protetto dalla CSP (nessuno script esterno), non da `httpOnly`.
   Alternativa più forte allo step 4.3: archiviazione tramite keyring del sistema (plugin Tauri).

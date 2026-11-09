@@ -9,6 +9,7 @@
 | `auth/auth-service.test.ts` | casi d'uso, corse sull'inserimento, collegamento Google, `deriveUsername` |
 | `auth/google-oauth.test.ts` | vettore PKCE RFC 7636, parametri dell'URL, scambio del codice, state a uso singolo e scaduto, 5 modalità di fallimento di Google |
 | `auth/password.test.ts`, `auth/token-service.test.ts`, `auth/jwt-secret.test.ts`, `auth/expiring-store.test.ts` | primitive di sicurezza |
+| `auth/google-credentials.test.ts` | parsing del JSON di Google (desktop vs web, campi mancanti), aggiornamento del `.env`, permessi 0600, errori di I/O |
 | `db/user-repository.test.ts` | query utenti, rilevamento violazioni UNIQUE |
 | `app.test.ts`, `config.test.ts`, `server.test.ts` | CORS, 404, 413, 500 opaco; variabili d'ambiente; avvio reale su porta casuale, persistenza della sessione tra riavvii, errori di avvio |
 

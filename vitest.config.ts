@@ -44,7 +44,7 @@ export default defineConfig({
       provider: 'v8',
       include: ['packages/*/src/**/*.{ts,tsx}', 'apps/*/src/**/*.{ts,tsx}'],
       // Entry point di solo wiring (eccezione documentata in .cursorrules §4).
-      exclude: ['apps/*/src/main.{ts,tsx}'],
+      exclude: ['apps/*/src/main*.{ts,tsx}'],
       reporter: ['text', 'html', 'json-summary'],
       thresholds: {
         lines: 80,

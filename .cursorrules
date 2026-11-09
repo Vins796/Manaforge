@@ -146,7 +146,7 @@ Nessun file o funzionalità è finito se non rispetta queste regole:
    dello stesso pacchetto, con lo stesso percorso relativo (es. `src/types/result.ts` → `tests/types/result.test.ts`;
    per `engine`: `src/mana/cost-parser.ts` → `tests/unit/mana/cost-parser.test.ts`).
    Eccezioni: i barrel `src/index.ts` sono coperti da `tests/smoke.test.ts`; gli entry point di solo wiring
-   `src/main.ts` / `src/main.tsx` (nessuna logica, esclusi dalla copertura) sono verificati indirettamente dai test
+   `src/main*.ts` / `src/main.tsx` (nessuna logica, esclusi dalla copertura) sono verificati indirettamente dai test
    di `server.ts` / `App.tsx`. Fixture condivise in `tests/helpers/`, setup del runner in `tests/setup.ts`.
 2. **Isolamento del Game Engine:** `packages/engine` non dipende da React né dal database; deve simulare un'intera
    partita in memoria in **meno di 50 ms** nei test Vitest. Copertura richiesta: **100%**.

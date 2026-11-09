@@ -29,8 +29,9 @@ pnpm --filter @manaforge/server build && node apps/server/dist/main.js   # API s
 pnpm --filter @manaforge/desktop-client dev                               # UI su http://localhost:5173
 ```
 Login Google opzionale: creare un client OAuth di tipo **"App desktop"** in Google Cloud Console (nessun redirect da registrare:
-Google accetta automaticamente il loopback `http://127.0.0.1:<porta>`) e avviare il server con le credenziali in un file
-`apps/server/.env` (escluso da git):
+Google accetta automaticamente il loopback `http://127.0.0.1:<porta>`), scaricare il JSON del client e generare
+`apps/server/.env` (escluso da git, permessi 0600):
 ```bash
-node --env-file=apps/server/.env apps/server/dist/main.js
+pnpm --filter @manaforge/server google:setup ~/Download/client_secret_XXXX.json
+pnpm --filter @manaforge/server start      # legge apps/server/.env se presente
 ```
