@@ -12,3 +12,5 @@ export * from './schemas/auth.js';
 export * from './constants/keywords.js';
 export * from './schemas/mana-cost.js';
 export * from './schemas/card.js';
+export * from './schemas/deck.js';
+export * from './schemas/deck-list.js';

@@ -8,12 +8,12 @@
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
-import { CARD_RARITIES, type AffinityCode, type KeywordCode } from '@manaforge/shared';
+import { CARD_RARITIES, DECK_BOARDS, type AffinityCode, type KeywordCode } from '@manaforge/shared';
 
 /** Rarità ammesse per le carte del catalogo (fonte unica: `@manaforge/shared`). */
 export { CARD_RARITIES };
-/** Sezioni di un mazzo. */
-export const DECK_BOARDS = ['main', 'sideboard'] as const;
+/** Sezioni di un mazzo (fonte unica: `@manaforge/shared`). */
+export { DECK_BOARDS };
 /** Modalità di partita. */
 export const MATCH_MODES = ['bot', 'p2p'] as const;
 /** Avatar assegnato ai nuovi utenti. */

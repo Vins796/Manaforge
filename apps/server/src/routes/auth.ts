@@ -5,7 +5,7 @@
  * @relatedDocs docs/catalog/API/01-authentication.md
  * @testFile apps/server/tests/routes/auth.test.ts
  */
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import {
   LoginRequestSchema,
@@ -18,6 +18,7 @@ import type { AuthService } from '../auth/auth-service.js';
 import { createExpiringStore } from '../auth/expiring-store.js';
 import { OAUTH_FLOW_TTL_MS, OAUTH_MAX_PENDING_FLOWS, type GoogleOAuth } from '../auth/google-oauth.js';
 import type { TokenService } from '../auth/token-service.js';
+import { bearerToken } from './require-auth.js';
 
 /** Tentativi di login/registrazione consentiti per IP al minuto. */
 export const AUTH_RATE_LIMIT_PER_MINUTE = 10;
@@ -44,6 +45,7 @@ const MESSAGES: Readonly<Record<AuthErrorCode, string>> = {
   GOOGLE_EMAIL_NOT_VERIFIED: 'L\'email dell\'account Google non è verificata.',
   GOOGLE_ACCOUNT_CONFLICT: 'Questa email è già collegata a un altro account Google.',
   NOT_FOUND: 'Risorsa non trovata.',
+  DECK_INVALID: 'Il mazzo non rispetta le regole di costruzione.',
   INTERNAL_ERROR: 'Errore interno del server.',
 };
 
@@ -70,12 +72,6 @@ const callbackPage = (title: string, message: string): string =>
   `<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Manaforge</title>
 <style>body{background:#0B0E14;color:#ece8df;font-family:system-ui,sans-serif;display:grid;place-items:center;height:100vh;margin:0}</style>
 </head><body><main><h1>${title}</h1><p>${message}</p></main></body></html>`;
-
-const bearerToken = (request: FastifyRequest): string | undefined => {
-  const header = request.headers.authorization;
-  const match = header ? /^Bearer\s+(\S+)$/i.exec(header) : null;
-  return match?.[1];
-};
 
 /**
  * Registra le rotte di autenticazione.

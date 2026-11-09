@@ -71,7 +71,7 @@ export const GoogleStartResponseSchema = z.strictObject({
 });
 export type GoogleStartResponse = z.infer<typeof GoogleStartResponseSchema>;
 
-/** Codici di errore restituiti dalle API di autenticazione. */
+/** Codici di errore restituiti dalle API REST (autenticazione, carte, mazzi). */
 export const AUTH_ERROR_CODES = [
   'VALIDATION_ERROR',
   'EMAIL_TAKEN',
@@ -86,6 +86,7 @@ export const AUTH_ERROR_CODES = [
   'GOOGLE_EMAIL_NOT_VERIFIED',
   'GOOGLE_ACCOUNT_CONFLICT',
   'NOT_FOUND',
+  'DECK_INVALID',
   'INTERNAL_ERROR',
 ] as const;
 export const AuthErrorCodeSchema = z.enum(AUTH_ERROR_CODES);

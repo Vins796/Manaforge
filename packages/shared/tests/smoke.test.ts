@@ -16,5 +16,7 @@ describe('@manaforge/shared smoke', () => {
     expect(typeof shared.isKeywordCode).toBe('function');
     expect(typeof shared.parseManaCost).toBe('function');
     expect(shared.CardCatalogSchema).toBeDefined();
+    expect(typeof shared.validateDeck).toBe('function');
+    expect(typeof shared.parseDeckList).toBe('function');
   });
 });
