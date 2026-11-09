@@ -28,5 +28,9 @@ pnpm verify      # gate di fine step: typecheck + test con copertura
 pnpm --filter @manaforge/server build && node apps/server/dist/main.js   # API su http://127.0.0.1:47821
 pnpm --filter @manaforge/desktop-client dev                               # UI su http://localhost:5173
 ```
-Login Google opzionale: impostare `MANAFORGE_GOOGLE_CLIENT_ID` (e `MANAFORGE_GOOGLE_CLIENT_SECRET`) con un client OAuth di tipo
-"Desktop app" e redirect `http://127.0.0.1:47821/api/auth/google/callback`.
+Login Google opzionale: creare un client OAuth di tipo **"App desktop"** in Google Cloud Console (nessun redirect da registrare:
+Google accetta automaticamente il loopback `http://127.0.0.1:<porta>`) e avviare il server con le credenziali in un file
+`apps/server/.env` (escluso da git):
+```bash
+node --env-file=apps/server/.env apps/server/dist/main.js
+```
