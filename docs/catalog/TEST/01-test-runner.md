@@ -24,6 +24,9 @@ Globale ≥ 80% (righe, funzioni, branch, statement); `packages/engine/src/**` =
 | `packages/shared/src/index.ts` | `packages/shared/tests/smoke.test.ts` |
 | `packages/engine/src/index.ts` | `packages/engine/tests/smoke.test.ts` |
 | `apps/server/src/index.ts` | `apps/server/tests/smoke.test.ts` |
+| `apps/server/src/db/db-schema.ts` | `apps/server/tests/db/db-schema.test.ts` |
+| `apps/server/src/db/db-client.ts` | `apps/server/tests/db/db-client.test.ts` |
+| `apps/server/src/db/db-paths.ts` | `apps/server/tests/db/db-paths.test.ts` |
 | `apps/desktop-client/src/app-info.ts` | `apps/desktop-client/tests/app-info.test.ts` (+ `smoke.test.ts`) |
 
 ## Comandi

@@ -69,10 +69,11 @@ manaforge/
 │
 └── apps/
     ├── server/                     # Backend Locale (Fastify + Socket.io + SQLite)
-    │   ├── prisma/                 # Schema SQLite (schema.prisma) e migrazioni
+    │   ├── drizzle.config.ts       # Configurazione drizzle-kit
+    │   ├── drizzle/                # Migrazioni SQL generate (`pnpm --filter @manaforge/server db:generate`)
     │   ├── src/
     │   │   ├── auth/               # Login manuale (JWT + Argon2id) e Google OAuth2
-    │   │   ├── db/                 # Connessione SQLite e Repository pattern
+    │   │   ├── db/                 # Schema Drizzle, connessione SQLite e Repository pattern
     │   │   ├── catalog/            # Seed del catalogo carte originale e cache immagini su disco
     │   │   ├── routes/             # Endpoint REST (Auth, Decks, Collection)
     │   │   └── ws/                 # Stanze multiplayer 1v1 e Bot Match

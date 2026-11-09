@@ -2,5 +2,4 @@
 
 | Doc | Titolo | Step |
 |---|---|---|
-
-_Nessuna voce ancora._
+| [01](01-sqlite-schema.md) | Schema SQLite locale | 1.2 |

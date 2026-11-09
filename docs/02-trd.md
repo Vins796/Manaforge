@@ -21,8 +21,9 @@
   stati filtrati (`sanitizeGameStateForPlayer`).
 
 ## 4. Database e Storage Locale (`[DATA]`)
-* **Database:** **SQLite** locale (file `~/.manaforge/data/manaforge.db`) gestito tramite **Prisma ORM**
-  (alternativa valutata: Drizzle — decisione definitiva con ADR allo step 1.2). Zero configurazione richiesta dall'utente.
+* **Database:** **SQLite** locale (file `~/.manaforge/data/manaforge.db`) gestito tramite **Drizzle ORM** sul driver
+  **better-sqlite3** (WAL, chiavi esterne attive). Migrazioni SQL generate da `drizzle-kit` in `apps/server/drizzle/`
+  e applicate automaticamente all'avvio. Zero configurazione richiesta dall'utente (ADR: `docs/catalog/ARCH/02-drizzle-orm.md`).
 * **Catalogo carte (originale):**
   * Le definizioni delle carte sono file JSON versionati in `apps/server/src/catalog/` e validati con Zod.
   * Al primo avvio (o quando cambia l'hash del catalogo) vengono importati nella tabella SQLite `cards`.

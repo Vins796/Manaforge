@@ -8,7 +8,7 @@
   * *Task:* inizializzare `pnpm` workspace, TypeScript, Vitest e creare tutte le cartelle e i 6 documenti.
   * *Test richiesto:* `pnpm test` esegue un test di fumo (`smoke.test.ts`) su tutti i pacchetti con esito positivo.
   * *Doc richiesta:* `docs/catalog/ARCH/01-monorepo-setup.md`.
-* `[ ]` **Step 1.2 — Database SQLite & Prisma Schema (`[DATA]`)**
+* `[x]` **Step 1.2 — Database SQLite & Schema Drizzle (`[DATA]`)**
   * *Task:* configurare SQLite locale e creare le tabelle `users`, `cards`, `decks`, `deck_cards`, `matches`.
   * *Test richiesto:* integration test (`db-schema.test.ts`) che crea, legge e cancella record su un DB SQLite di test.
   * *Doc richiesta:* `docs/catalog/DATA/01-sqlite-schema.md`.
@@ -64,7 +64,7 @@
   * *Task:* stanze Socket.io con filtro `sanitizeGameStateForPlayer` (anti-cheat), creazione/unione stanza con amico e configurazione
     Tauri (con sidecar del server) per i pacchetti store di Windows (`.msix`/`.exe`) e Linux (`.flatpak`/`.AppImage`).
   * *Test richiesto:* test E2E WebSocket con due client simulati connessi alla stessa stanza + verifica build desktop.
-  * *Doc richiesta:* `docs/catalog/ARCH/02-multiplayer-and-packaging.md`.
+  * *Doc richiesta:* `docs/catalog/ARCH/03-multiplayer-and-packaging.md`.
 
 ---
 
@@ -73,3 +73,4 @@
 | Step | Data | Comando | Suite | Test | Esito | Copertura | Note |
 |---|---|---|---|---|---|---|---|
 | 1.1 | 2026-11-09 | `pnpm verify` | 4 progetti Vitest (`shared`, `engine`, `server`, `desktop-client`), 8 file | 15 | ✅ 15/15, `tsc -b` verde | 100% stmt/branch/func/lines | pnpm 10.28, TypeScript 7.0, Vitest 5.1; soglie 80% globale / 100% engine |
+| 1.2 | 2026-11-09 | `pnpm verify` | `apps/server/tests/db/{db-schema,db-client,db-paths}.test.ts` (+ suite 1.1), 11 file | 34 | ✅ 34/34, `tsc -b` verde | 100% stmt/func/lines, 94.7% branch | Drizzle 0.45.4 + better-sqlite3 13.0.3, migrazione `0000_init` |

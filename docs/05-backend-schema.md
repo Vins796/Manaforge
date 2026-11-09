@@ -1,6 +1,9 @@
 # 05. Schema del Back-end (SQLite + In-Memory GameState) — Manaforge
 
-## 1. Schema Database Locale SQLite (`apps/server/prisma/schema.prisma`) — `[DATA]`
+## 1. Schema Database Locale SQLite (`apps/server/src/db/db-schema.ts`, Drizzle) — `[DATA]`
+
+> Nomi di colonna in `snake_case` nel DB, `camelCase` in TypeScript. Dettaglio di vincoli e indici in
+> `docs/catalog/DATA/01-sqlite-schema.md`.
 
 ### Tabella `users`
 * `id`: String `@id @default(uuid())`
@@ -34,23 +37,23 @@
 * `userId`: String (FK → `users.id`, `onDelete: Cascade`)
 * `name`: String
 * `format`: String `@default("standard")`
-* `coverCardId`: String?
+* `coverCardId`: String? (FK → `cards.id`, `onDelete: SetNull`)
 * `updatedAt`: DateTime `@updatedAt`
 
 ### Tabella `deck_cards`
 * `id`: String `@id @default(uuid())`
 * `deckId`: String (FK → `decks.id`, `onDelete: Cascade`)
-* `cardId`: String (FK → `cards.id`)
+* `cardId`: String (FK → `cards.id`, `onDelete: Restrict`: una carta usata in un mazzo non può sparire dal catalogo)
 * `quantity`: Int
 * `board`: String (`"main"` | `"sideboard"`)
 * Vincolo `@@unique([deckId, cardId, board])`
 
 ### Tabella `matches`
 * `id`: String `@id @default(uuid())`
-* `hostUserId`: String
-* `guestUserId`: String? (`null` se contro Bot)
+* `hostUserId`: String (FK → `users.id`, `onDelete: Cascade`)
+* `guestUserId`: String? (`null` se contro Bot; **nessuna FK**: l'ospite è un utente del DB di un'altra macchina)
 * `mode`: String (`"bot"` | `"p2p"`)
-* `winnerUserId`: String?
+* `winnerUserId`: String? (nessuna FK, per lo stesso motivo; `null` = vittoria del Bot o partita annullata)
 * `playedAt`: DateTime `@default(now())`
 
 ## 2. Architettura del `GameState` In-Memory (`packages/shared/src/types`) — `[RULE]` + `[DATA]`
