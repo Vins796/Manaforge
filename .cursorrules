@@ -157,5 +157,10 @@ Nessun file o funzionalità è finito se non rispetta queste regole:
 
 1. Un solo sotto-step di `docs/06-implementation-plan.md` alla volta.
 2. Ciclo: test rosso → implementazione → test verde → refactor → header + TSDoc → voce di catalogo.
-3. A fine step: `pnpm verify`, aggiornare il Registro Test in `06-implementation-plan.md`, spuntare `[x]`,
-   commit con Conventional Commits, push su `develop`, **fermarsi e chiedere conferma**.
+3. **Un branch per ogni task/attività:** creare sempre un branch dedicato da `develop` aggiornato
+   (`feat/<step>-<slug>`, `fix/<slug>`, `docs/<slug>`, `chore/<slug>`), lavorare e committare solo lì,
+   pushare il branch (`git push -u origin <branch>`), poi integrarlo in `develop` con merge `--no-ff` e pushare `develop`.
+   Mai committare direttamente su `develop`.
+4. A fine step: `pnpm verify`, aggiornare il Registro Test in `06-implementation-plan.md`, spuntare `[x]`,
+   commit con Conventional Commits sul branch del task, push del branch, merge in `develop` e push di `develop`,
+   **fermarsi e chiedere conferma**.

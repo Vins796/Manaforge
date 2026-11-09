@@ -13,5 +13,8 @@ describe('@manaforge/shared smoke', () => {
     expect(shared.APP_NAME).toBe('Manaforge');
     expect(typeof shared.ok).toBe('function');
     expect(typeof shared.isAffinityCode).toBe('function');
+    expect(typeof shared.isKeywordCode).toBe('function');
+    expect(typeof shared.parseManaCost).toBe('function');
+    expect(shared.CardCatalogSchema).toBeDefined();
   });
 });

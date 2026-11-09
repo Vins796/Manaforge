@@ -18,7 +18,7 @@
   * *Doc richiesta:* `docs/catalog/API/01-authentication.md`.
 
 ## FASE 2: Catalogo Carte Originale, Caching Immagini e Deckbuilder
-* `[ ]` **Step 2.1 — Seed Catalogo Carte Originale & Disk Image Cache (`[DATA]`)**
+* `[x]` **Step 2.1 — Seed Catalogo Carte Originale & Disk Image Cache (`[DATA]`)**
   * *Task:* catalogo JSON originale validato con Zod (primo blocco di carte), importer idempotente in SQLite basato su hash,
     generatore di illustrazioni procedurali SVG con salvataggio in cache su disco.
   * *Test richiesto:* `catalog-sync.test.ts` che importa un batch di carte di prova e verifica il salvataggio in cache dell'immagine.
@@ -75,3 +75,4 @@
 | 1.1 | 2026-11-09 | `pnpm verify` | 4 progetti Vitest (`shared`, `engine`, `server`, `desktop-client`), 8 file | 15 | ✅ 15/15, `tsc -b` verde | 100% stmt/branch/func/lines | pnpm 10.28, TypeScript 7.0, Vitest 5.1; soglie 80% globale / 100% engine |
 | 1.2 | 2026-11-09 | `pnpm verify` | `apps/server/tests/db/{db-schema,db-client,db-paths}.test.ts` (+ suite 1.1), 11 file | 34 | ✅ 34/34, `tsc -b` verde | 100% stmt/func/lines, 94.7% branch | Drizzle 0.45.4 + better-sqlite3 13.0.3, migrazione `0000_init` |
 | 1.3 | 2026-11-09 | `pnpm verify` + E2E manuale Playwright | 31 file (server 15, client 11, shared 5): `apps/server/tests/routes/auth.test.ts` (API), `auth-service`, `google-oauth`, `LoginPage`, `use-auth-store`… | 160 | ✅ 160/160, `tsc -b` verde, build Vite ok | 99.5% stmt, 98.2% branch | Flusso reale verificato: redirect /home→/login, registrazione, ripristino sessione, 401, Google non configurato; 0 violazioni CSP |
+| 2.1 | 2026-11-09 | `pnpm verify` | 41 file: `apps/server/tests/catalog/{catalog-sync,card-catalog,art-generator,image-cache}.test.ts`, `db/card-repository`, `packages/shared/tests/schemas/{card,mana-cost}`, `constants/keywords`… | 250 | ✅ 250/250, `tsc -b` verde | 99.7% stmt, 97.7% branch | Blocco MF1 (48 carte originali), versione `v1-<sha256>`, SVG procedurali deterministici in `~/.manaforge/cache/images`; branch `feat/2.1-card-catalog` |

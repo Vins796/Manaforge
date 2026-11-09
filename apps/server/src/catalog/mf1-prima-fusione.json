@@ -1,0 +1,643 @@
+{
+  "schemaVersion": 1,
+  "block": {
+    "code": "MF1",
+    "name": "Prima Fusione"
+  },
+  "cards": [
+    {
+      "id": "MF1-001",
+      "name": "Altopiano Aurorale",
+      "cost": "",
+      "type": "Fonte base",
+      "subtypes": [
+        "Alba"
+      ],
+      "rulesText": "Esaurisci: aggiungi {A}.",
+      "rarity": "comune",
+      "artSeed": "altopiano-aurorale"
+    },
+    {
+      "id": "MF1-002",
+      "name": "Scogliera di Marea",
+      "cost": "",
+      "type": "Fonte base",
+      "subtypes": [
+        "Marea"
+      ],
+      "rulesText": "Esaurisci: aggiungi {M}.",
+      "rarity": "comune",
+      "artSeed": "scogliera-di-marea"
+    },
+    {
+      "id": "MF1-003",
+      "name": "Cripta Velata",
+      "cost": "",
+      "type": "Fonte base",
+      "subtypes": [
+        "Ombra"
+      ],
+      "rulesText": "Esaurisci: aggiungi {O}.",
+      "rarity": "comune",
+      "artSeed": "cripta-velata"
+    },
+    {
+      "id": "MF1-004",
+      "name": "Fucina Vulcanica",
+      "cost": "",
+      "type": "Fonte base",
+      "subtypes": [
+        "Fiamma"
+      ],
+      "rulesText": "Esaurisci: aggiungi {F}.",
+      "rarity": "comune",
+      "artSeed": "fucina-vulcanica"
+    },
+    {
+      "id": "MF1-005",
+      "name": "Radura Antica",
+      "cost": "",
+      "type": "Fonte base",
+      "subtypes": [
+        "Selva"
+      ],
+      "rulesText": "Esaurisci: aggiungi {S}.",
+      "rarity": "comune",
+      "artSeed": "radura-antica"
+    },
+    {
+      "id": "MF1-006",
+      "name": "Pietra Errante",
+      "cost": "",
+      "type": "Fonte",
+      "rulesText": "Esaurisci: aggiungi {C}.",
+      "rarity": "non_comune",
+      "artSeed": "pietra-errante"
+    },
+    {
+      "id": "MF1-007",
+      "name": "Scudiera dell'Aurora",
+      "cost": "{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Scudiero"
+      ],
+      "power": 1,
+      "toughness": 2,
+      "keywords": [
+        "SENTINELLA"
+      ],
+      "rarity": "comune",
+      "artSeed": "scudiera-dell-aurora"
+    },
+    {
+      "id": "MF1-008",
+      "name": "Custode del Bastione",
+      "cost": "{1}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Custode"
+      ],
+      "power": 1,
+      "toughness": 4,
+      "rarity": "comune",
+      "artSeed": "custode-del-bastione"
+    },
+    {
+      "id": "MF1-009",
+      "name": "Grifone Solare",
+      "cost": "{3}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Grifone"
+      ],
+      "power": 2,
+      "toughness": 3,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "comune",
+      "artSeed": "grifone-solare"
+    },
+    {
+      "id": "MF1-010",
+      "name": "Paladina dell'Ordine",
+      "cost": "{2}{A}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Paladino"
+      ],
+      "power": 3,
+      "toughness": 4,
+      "keywords": [
+        "SENTINELLA",
+        "LINFA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "paladina-dell-ordine"
+    },
+    {
+      "id": "MF1-011",
+      "name": "Guerriera Fulminea",
+      "cost": "{2}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Guerriero"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "FULMINEO"
+      ],
+      "rarity": "comune",
+      "artSeed": "guerriera-fulminea"
+    },
+    {
+      "id": "MF1-012",
+      "name": "Vigilante Celeste",
+      "cost": "{4}{A}{A}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spirito",
+        "Guardiano"
+      ],
+      "power": 4,
+      "toughness": 5,
+      "keywords": [
+        "ALATO",
+        "SENTINELLA",
+        "EGIDA"
+      ],
+      "rarity": "mitica",
+      "artSeed": "vigilante-celeste"
+    },
+    {
+      "id": "MF1-013",
+      "name": "Benedizione Radiosa",
+      "cost": "{A}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene +1/+3 fino alla fine del turno.",
+      "rarity": "comune",
+      "artSeed": "benedizione-radiosa"
+    },
+    {
+      "id": "MF1-014",
+      "name": "Sigillo di Quiete",
+      "cost": "{1}{A}",
+      "type": "Rituale",
+      "rulesText": "Esilia la creatura bersaglio con forza 4 o superiore.",
+      "rarity": "non_comune",
+      "artSeed": "sigillo-di-quiete"
+    },
+    {
+      "id": "MF1-015",
+      "name": "Apprendista delle Correnti",
+      "cost": "{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Erudito"
+      ],
+      "rulesText": "Quando entra in campo, pesca una carta, poi scarta una carta.",
+      "power": 1,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "apprendista-delle-correnti"
+    },
+    {
+      "id": "MF1-016",
+      "name": "Spettro Brumoso",
+      "cost": "{1}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spirito"
+      ],
+      "power": 1,
+      "toughness": 3,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "comune",
+      "artSeed": "spettro-brumoso"
+    },
+    {
+      "id": "MF1-017",
+      "name": "Oracolo delle Maree",
+      "cost": "{2}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Veggente"
+      ],
+      "rulesText": "Quando entra in campo, pesca una carta.",
+      "power": 2,
+      "toughness": 2,
+      "rarity": "non_comune",
+      "artSeed": "oracolo-delle-maree"
+    },
+    {
+      "id": "MF1-018",
+      "name": "Serpente Abissale",
+      "cost": "{4}{M}{M}",
+      "type": "Creatura",
+      "subtypes": [
+        "Serpente"
+      ],
+      "power": 5,
+      "toughness": 5,
+      "keywords": [
+        "EGIDA"
+      ],
+      "rarity": "rara",
+      "artSeed": "serpente-abissale"
+    },
+    {
+      "id": "MF1-019",
+      "name": "Onda di Rifiuto",
+      "cost": "{1}{M}{M}",
+      "type": "Rapido",
+      "rulesText": "Annulla la magia bersaglio.",
+      "rarity": "non_comune",
+      "artSeed": "onda-di-rifiuto"
+    },
+    {
+      "id": "MF1-020",
+      "name": "Visione Limpida",
+      "cost": "{1}{M}",
+      "type": "Rituale",
+      "rulesText": "Guarda le prime tre carte del tuo mazzo. Mettine una nella tua mano e le altre in fondo al mazzo in qualsiasi ordine.",
+      "rarity": "comune",
+      "artSeed": "visione-limpida"
+    },
+    {
+      "id": "MF1-021",
+      "name": "Risacca",
+      "cost": "{1}{M}",
+      "type": "Rapido",
+      "rulesText": "Fai tornare la creatura bersaglio nella mano del suo proprietario.",
+      "rarity": "comune",
+      "artSeed": "risacca"
+    },
+    {
+      "id": "MF1-022",
+      "name": "Ladro di Respiri",
+      "cost": "{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spettro"
+      ],
+      "power": 1,
+      "toughness": 1,
+      "keywords": [
+        "VELENO"
+      ],
+      "rarity": "comune",
+      "artSeed": "ladro-di-respiri"
+    },
+    {
+      "id": "MF1-023",
+      "name": "Sciacallo del Crepuscolo",
+      "cost": "{1}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Bestia"
+      ],
+      "rulesText": "Quando muore, ogni avversario perde 1 punto vita.",
+      "power": 2,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "sciacallo-del-crepuscolo"
+    },
+    {
+      "id": "MF1-024",
+      "name": "Divoratore di Tombe",
+      "cost": "{2}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Orrore"
+      ],
+      "power": 3,
+      "toughness": 3,
+      "rarity": "comune",
+      "artSeed": "divoratore-di-tombe"
+    },
+    {
+      "id": "MF1-025",
+      "name": "Signora delle Cripte",
+      "cost": "{3}{O}{O}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spettro",
+        "Nobile"
+      ],
+      "power": 4,
+      "toughness": 4,
+      "keywords": [
+        "ALATO",
+        "LINFA"
+      ],
+      "rarity": "rara",
+      "artSeed": "signora-delle-cripte"
+    },
+    {
+      "id": "MF1-026",
+      "name": "Patto Cinereo",
+      "cost": "{1}{O}",
+      "type": "Rituale",
+      "rulesText": "Come costo addizionale, sacrifica una creatura. Pesca due carte.",
+      "rarity": "comune",
+      "artSeed": "patto-cinereo"
+    },
+    {
+      "id": "MF1-027",
+      "name": "Falce Silente",
+      "cost": "{1}{O}",
+      "type": "Rapido",
+      "rulesText": "Distruggi la creatura bersaglio con forza 3 o inferiore.",
+      "rarity": "comune",
+      "artSeed": "falce-silente"
+    },
+    {
+      "id": "MF1-028",
+      "name": "Sussurro Avido",
+      "cost": "{2}{O}",
+      "type": "Rituale",
+      "rulesText": "L'avversario bersaglio scarta due carte.",
+      "rarity": "non_comune",
+      "artSeed": "sussurro-avido"
+    },
+    {
+      "id": "MF1-029",
+      "name": "Scintilla Rovente",
+      "cost": "{F}",
+      "type": "Rapido",
+      "rulesText": "Scintilla Rovente infligge 3 danni a qualsiasi bersaglio.",
+      "rarity": "comune",
+      "artSeed": "scintilla-rovente"
+    },
+    {
+      "id": "MF1-030",
+      "name": "Folletto Incendiario",
+      "cost": "{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Folletto"
+      ],
+      "power": 1,
+      "toughness": 1,
+      "keywords": [
+        "SCATTO"
+      ],
+      "rarity": "comune",
+      "artSeed": "folletto-incendiario"
+    },
+    {
+      "id": "MF1-031",
+      "name": "Predone delle Ceneri",
+      "cost": "{1}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Predone"
+      ],
+      "power": 2,
+      "toughness": 2,
+      "keywords": [
+        "SCATTO"
+      ],
+      "rarity": "comune",
+      "artSeed": "predone-delle-ceneri"
+    },
+    {
+      "id": "MF1-032",
+      "name": "Furia delle Braci",
+      "cost": "{2}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Spirito"
+      ],
+      "power": 2,
+      "toughness": 1,
+      "keywords": [
+        "DOPPIO_FENDENTE"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "furia-delle-braci"
+    },
+    {
+      "id": "MF1-033",
+      "name": "Drago delle Fornaci",
+      "cost": "{4}{F}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Drago"
+      ],
+      "power": 5,
+      "toughness": 5,
+      "keywords": [
+        "ALATO",
+        "SCATTO"
+      ],
+      "rarity": "mitica",
+      "artSeed": "drago-delle-fornaci"
+    },
+    {
+      "id": "MF1-034",
+      "name": "Pioggia di Lapilli",
+      "cost": "{2}{F}{F}",
+      "type": "Rituale",
+      "rulesText": "Pioggia di Lapilli infligge 2 danni a ogni creatura.",
+      "rarity": "non_comune",
+      "artSeed": "pioggia-di-lapilli"
+    },
+    {
+      "id": "MF1-035",
+      "name": "Impeto Furioso",
+      "cost": "{F}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene +2/+0 e Sfondamento fino alla fine del turno.",
+      "rarity": "comune",
+      "artSeed": "impeto-furioso"
+    },
+    {
+      "id": "MF1-036",
+      "name": "Vigore della Selva",
+      "cost": "{1}{S}",
+      "type": "Rapido",
+      "rulesText": "La creatura bersaglio ottiene +3/+3 fino alla fine del turno.",
+      "rarity": "comune",
+      "artSeed": "vigore-della-selva"
+    },
+    {
+      "id": "MF1-037",
+      "name": "Cinghiale Irsuto",
+      "cost": "{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Bestia"
+      ],
+      "power": 2,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "cinghiale-irsuto"
+    },
+    {
+      "id": "MF1-038",
+      "name": "Ragno Tessitore",
+      "cost": "{1}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Ragno"
+      ],
+      "power": 1,
+      "toughness": 3,
+      "keywords": [
+        "VEDETTA"
+      ],
+      "rarity": "comune",
+      "artSeed": "ragno-tessitore"
+    },
+    {
+      "id": "MF1-039",
+      "name": "Lupo di Brughiera",
+      "cost": "{2}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Lupo"
+      ],
+      "power": 3,
+      "toughness": 3,
+      "rarity": "comune",
+      "artSeed": "lupo-di-brughiera"
+    },
+    {
+      "id": "MF1-040",
+      "name": "Druida della Linfa",
+      "cost": "{1}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Druido"
+      ],
+      "rulesText": "Esaurisci: aggiungi {S}.",
+      "power": 1,
+      "toughness": 1,
+      "rarity": "comune",
+      "artSeed": "druida-della-linfa"
+    },
+    {
+      "id": "MF1-041",
+      "name": "Colosso di Radici",
+      "cost": "{4}{S}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Elementale"
+      ],
+      "power": 6,
+      "toughness": 6,
+      "keywords": [
+        "SFONDAMENTO"
+      ],
+      "rarity": "rara",
+      "artSeed": "colosso-di-radici"
+    },
+    {
+      "id": "MF1-042",
+      "name": "Richiamo del Germoglio",
+      "cost": "{1}{S}",
+      "type": "Rituale",
+      "rulesText": "Cerca nel tuo mazzo una Fonte base e mettila in campo esaurita. Poi rimescola il mazzo.",
+      "rarity": "comune",
+      "artSeed": "richiamo-del-germoglio"
+    },
+    {
+      "id": "MF1-043",
+      "name": "Automa di Bronzo",
+      "cost": "{3}",
+      "type": "Creatura",
+      "subtypes": [
+        "Costrutto"
+      ],
+      "power": 2,
+      "toughness": 3,
+      "keywords": [
+        "SENTINELLA"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "automa-di-bronzo"
+    },
+    {
+      "id": "MF1-044",
+      "name": "Lanterna del Viandante",
+      "cost": "{2}",
+      "type": "Artefatto",
+      "rulesText": "Esaurisci: aggiungi un mana di qualsiasi affinità.",
+      "rarity": "non_comune",
+      "artSeed": "lanterna-del-viandante"
+    },
+    {
+      "id": "MF1-045",
+      "name": "Talismano Prismatico",
+      "cost": "{1}",
+      "type": "Artefatto",
+      "rulesText": "Quando entra in campo, pesca una carta.",
+      "rarity": "comune",
+      "artSeed": "talismano-prismatico"
+    },
+    {
+      "id": "MF1-046",
+      "name": "Cavaliere della Brace Dorata",
+      "cost": "{1}{A}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Cavaliere"
+      ],
+      "power": 3,
+      "toughness": 2,
+      "keywords": [
+        "SCATTO",
+        "FENDENTE"
+      ],
+      "rarity": "rara",
+      "artSeed": "cavaliere-della-brace-dorata"
+    },
+    {
+      "id": "MF1-047",
+      "name": "Sciamano della Palude",
+      "cost": "{1}{O}{S}",
+      "type": "Creatura",
+      "subtypes": [
+        "Umano",
+        "Sciamano"
+      ],
+      "power": 2,
+      "toughness": 3,
+      "keywords": [
+        "VELENO"
+      ],
+      "rarity": "non_comune",
+      "artSeed": "sciamano-della-palude"
+    },
+    {
+      "id": "MF1-048",
+      "name": "Chimera Tempestosa",
+      "cost": "{2}{M}{F}",
+      "type": "Creatura",
+      "subtypes": [
+        "Chimera"
+      ],
+      "power": 3,
+      "toughness": 3,
+      "keywords": [
+        "ALATO"
+      ],
+      "rarity": "rara",
+      "artSeed": "chimera-tempestosa"
+    }
+  ]
+}
