@@ -1,0 +1,10 @@
+# Manaforge — regole per agenti AI / IDE
+# La fonte di verità completa è AGENT_RULES.md: leggila prima di modificare qualsiasi file.
+
+- Prodotto originale (genere: card game 1v1 a risorse). Vietati nomi, testi, arte e trade dress di Magic: The Gathering / MTG Arena.
+- Rispetta l'albero directory di AGENT_RULES.md §1. Niente file fuori posto.
+- TypeScript strict, ESM, Result<T,E> per errori di dominio, Zod ai confini (IPC, rete, file).
+- packages/engine è puro e deterministico: niente I/O, niente Math.random/Date.now.
+- TSDoc su ogni export + voce in docs/catalog/<arch|rules|api|ui|data|test>/.
+- TDD: nessuno step è finito senza test verdi (`npm run verify`).
+- Un sotto-step alla volta da docs/06-implementation-plan.md; a fine step spunta [x], aggiorna il registro test e chiedi conferma.

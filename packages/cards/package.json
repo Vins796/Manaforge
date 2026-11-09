@@ -1,0 +1,15 @@
+{
+  "name": "@manaforge/cards",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Definizioni delle carte originali e DSL delle abilità.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "dependencies": { "@manaforge/shared": "0.1.0" }
+}

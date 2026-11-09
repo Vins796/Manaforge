@@ -1,0 +1,15 @@
+{
+  "name": "@manaforge/db",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Persistenza SQLite: connessione, migrazioni, repository.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "dependencies": { "@manaforge/shared": "0.1.0" }
+}

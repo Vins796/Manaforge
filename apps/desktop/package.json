@@ -1,0 +1,7 @@
+{
+  "name": "@manaforge/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Applicazione desktop Electron di Manaforge (main, preload, renderer). Scaffold: lo shell Electron è implementato nello step 1.4.",
+  "type": "module"
+}
