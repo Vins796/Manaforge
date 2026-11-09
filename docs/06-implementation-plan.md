@@ -12,7 +12,7 @@
   * *Task:* configurare SQLite locale e creare le tabelle `users`, `cards`, `decks`, `deck_cards`, `matches`.
   * *Test richiesto:* integration test (`db-schema.test.ts`) che crea, legge e cancella record su un DB SQLite di test.
   * *Doc richiesta:* `docs/catalog/DATA/01-sqlite-schema.md`.
-* `[ ]` **Step 1.3 — Autenticazione Manuale + Google OAuth2 (`[API]` + `[UI]`)**
+* `[x]` **Step 1.3 — Autenticazione Manuale + Google OAuth2 (`[API]` + `[UI]`)**
   * *Task:* registrazione/login manuale (Argon2id + JWT), flusso Google OAuth2 (PKCE) e pagina `/login` in React.
   * *Test richiesto:* test API (`auth.test.ts`) per registrazione, login valido, password errata (401) e mock callback Google.
   * *Doc richiesta:* `docs/catalog/API/01-authentication.md`.
@@ -74,3 +74,4 @@
 |---|---|---|---|---|---|---|---|
 | 1.1 | 2026-11-09 | `pnpm verify` | 4 progetti Vitest (`shared`, `engine`, `server`, `desktop-client`), 8 file | 15 | ✅ 15/15, `tsc -b` verde | 100% stmt/branch/func/lines | pnpm 10.28, TypeScript 7.0, Vitest 5.1; soglie 80% globale / 100% engine |
 | 1.2 | 2026-11-09 | `pnpm verify` | `apps/server/tests/db/{db-schema,db-client,db-paths}.test.ts` (+ suite 1.1), 11 file | 34 | ✅ 34/34, `tsc -b` verde | 100% stmt/func/lines, 94.7% branch | Drizzle 0.45.4 + better-sqlite3 13.0.3, migrazione `0000_init` |
+| 1.3 | 2026-11-09 | `pnpm verify` + E2E manuale Playwright | 31 file (server 15, client 11, shared 5): `apps/server/tests/routes/auth.test.ts` (API), `auth-service`, `google-oauth`, `LoginPage`, `use-auth-store`… | 160 | ✅ 160/160, `tsc -b` verde, build Vite ok | 99.5% stmt, 98.2% branch | Flusso reale verificato: redirect /home→/login, registrazione, ripristino sessione, 401, Google non configurato; 0 violazioni CSP |

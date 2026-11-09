@@ -82,6 +82,8 @@ manaforge/
     │   └── tests/                  # Integration test su DB in-memory e API
     │
     └── desktop-client/             # Frontend (React + Vite + Tailwind + Framer Motion + Tauri)
+        ├── index.html              # Entry HTML di Vite (con CSP)
+        ├── vite.config.ts          # Configurazione Vite
         ├── src-tauri/              # Packaging nativo Windows (.msix/.exe) e Linux (.flatpak/.AppImage)
         ├── src/
         │   ├── assets/             # Font (licenza OFL), icone affinità originali, suoni originali/CC0
@@ -143,7 +145,9 @@ Nessun file o funzionalità è finito se non rispetta queste regole:
 1. **Regola 1-a-1:** ogni file in `src/` ha il suo corrispondente `.test.ts` (o `.test.tsx`) nella cartella `tests/`
    dello stesso pacchetto, con lo stesso percorso relativo (es. `src/types/result.ts` → `tests/types/result.test.ts`;
    per `engine`: `src/mana/cost-parser.ts` → `tests/unit/mana/cost-parser.test.ts`).
-   Eccezione: i barrel `src/index.ts` sono coperti da `tests/smoke.test.ts`.
+   Eccezioni: i barrel `src/index.ts` sono coperti da `tests/smoke.test.ts`; gli entry point di solo wiring
+   `src/main.ts` / `src/main.tsx` (nessuna logica, esclusi dalla copertura) sono verificati indirettamente dai test
+   di `server.ts` / `App.tsx`. Fixture condivise in `tests/helpers/`, setup del runner in `tests/setup.ts`.
 2. **Isolamento del Game Engine:** `packages/engine` non dipende da React né dal database; deve simulare un'intera
    partita in memoria in **meno di 50 ms** nei test Vitest. Copertura richiesta: **100%**.
 3. **Blocco di Avanzamento:** se anche un solo test fallisce (`pnpm test`) o il typecheck fallisce (`pnpm typecheck`),

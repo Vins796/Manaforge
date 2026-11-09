@@ -5,7 +5,12 @@
   "description": "Tipi, costanti e contratti condivisi tra client, server ed engine.",
   "type": "module",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
-  "dependencies": {  }
+  "dependencies": {
+    "zod": "4.6.7"
+  }
 }

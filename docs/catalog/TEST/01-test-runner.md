@@ -8,14 +8,17 @@
 | `shared` | `packages/shared` | node |
 | `engine` | `packages/engine` | node |
 | `server` | `apps/server` | node |
-| `desktop-client` | `apps/desktop-client` | node (passerà a `jsdom` con React Testing Library allo step 1.3) |
+| `desktop-client` | `apps/desktop-client` | jsdom + React Testing Library (`tests/setup.ts`, plugin React) |
 
 Test in `tests/**/*.test.{ts,tsx}` di ciascun workspace.
 
 ## Soglie di copertura
 Globale ≥ 80% (righe, funzioni, branch, statement); `packages/engine/src/**` = **100%**.
 
-## Regola 1-a-1 — mappatura attuale
+## Regola 1-a-1
+Ogni file `src/**` ha il test allo stesso percorso relativo in `tests/` (elenco completo dei file degli step 1.2–1.3 in `TEST/02` e `TEST/03`).
+
+### Mappatura dello step 1.1
 | Sorgente | Test |
 |---|---|
 | `packages/shared/src/types/result.ts` | `packages/shared/tests/types/result.test.ts` |

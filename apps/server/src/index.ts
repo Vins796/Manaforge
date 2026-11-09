@@ -1,14 +1,21 @@
 /**
  * @nature [ARCH]
  * @module ServerIndex
- * @description Entry point del backend locale. Fastify, Socket.io e SQLite vengono aggiunti dagli step 1.2–1.3.
+ * @description API pubblica del backend locale (composizione e factory dei servizi).
  * @relatedDocs docs/catalog/ARCH/01-monorepo-setup.md
  * @testFile apps/server/tests/smoke.test.ts
  */
 import { ENGINE_ID } from '@manaforge/engine';
 import { APP_NAME } from '@manaforge/shared';
 
-/** Metadati del servizio esposti dall'endpoint di health (step 1.3). */
+export { buildApp } from './app.js';
+export { createAuthService } from './auth/auth-service.js';
+export { createGoogleOAuth } from './auth/google-oauth.js';
+export { createTokenService } from './auth/token-service.js';
+export { loadServerConfig } from './config.js';
+export { startServer } from './server.js';
+
+/** Metadati del servizio. */
 export interface ServerInfo {
   readonly name: string;
   readonly engine: string;

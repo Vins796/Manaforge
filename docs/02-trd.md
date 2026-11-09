@@ -33,9 +33,13 @@
   * In futuro potranno essere sostituite da illustrazioni originali con licenza, mantenendo lo stesso percorso di cache.
 
 ## 5. Autenticazione (`[API]`)
-* **Manuale:** password hashata con `argon2id`, sessione gestita tramite token `JWT` (firmato con segreto generato
-  localmente al primo avvio e salvato in `~/.manaforge/data/`).
-* **Google Login:** flusso `OAuth 2.0` con PKCE per app desktop (loopback redirect), tramite Client ID gratuito di Google Cloud Console.
+* **Manuale:** password hashata con `argon2id` (`@node-rs/argon2`, parametri OWASP), sessione gestita tramite `JWT` HS256
+  (`jose`, 7 giorni) firmato con un segreto di 64 byte generato al primo avvio in `~/.manaforge/data/jwt.secret` (0600).
+* **Google Login:** flusso `OAuth 2.0` Authorization Code + PKCE S256 per app desktop: il browser di sistema torna sul
+  redirect loopback `http://127.0.0.1:<porta>/api/auth/google/callback` del server locale, il client fa polling del risultato.
+  Client ID "Desktop app" gratuito di Google Cloud Console, passato con `MANAFORGE_GOOGLE_CLIENT_ID` (+ `MANAFORGE_GOOGLE_CLIENT_SECRET`).
+* **Configurazione server:** `MANAFORGE_HOST` (default `127.0.0.1`), `MANAFORGE_PORT` (default `47821`), `MANAFORGE_ALLOWED_ORIGINS`.
+* Dettagli: `docs/catalog/API/01-authentication.md`.
 
 ## 6. Sicurezza
 * Validazione Zod di ogni payload REST e Socket.io; rate limit sugli endpoint di autenticazione.

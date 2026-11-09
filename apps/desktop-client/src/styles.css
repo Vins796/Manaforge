@@ -1,0 +1,53 @@
+/*
+ * @nature [UI]
+ * @module Styles
+ * @description Foglio di stile globale: Tailwind CSS 4 e design token del Design Brief (docs/04-design-brief.md).
+ * @relatedDocs docs/catalog/UI/01-login-page.md
+ * @testFile apps/desktop-client/tests/smoke.test.ts
+ */
+@import 'tailwindcss';
+
+@theme {
+  --color-abyss: #0b0e14;
+  --color-mat: #141923;
+  --color-mat-opponent: #10141d;
+  --color-panel: #1c2230;
+  --color-line: #334155;
+  --color-text: #ece8df;
+  --color-text-muted: #a8a396;
+  --color-cta: #f97316;
+  --color-cta-deep: #ea580c;
+  --color-secondary: #0284c7;
+  --color-secondary-light: #38bdf8;
+  --color-danger: #f87171;
+  --color-aff-alba: #fde68a;
+  --color-aff-marea: #38bdf8;
+  --color-aff-ombra: #a855f7;
+  --color-aff-fiamma: #f87171;
+  --color-aff-selva: #4ade80;
+  --font-display: 'Cinzel', Georgia, serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --shadow-cta: 0 0 15px rgb(249 115 22 / 0.5);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-abyss);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

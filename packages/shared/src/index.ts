@@ -8,3 +8,4 @@
 export * from './constants/affinities.js';
 export * from './constants/game.js';
 export * from './types/result.js';
+export * from './schemas/auth.js';
