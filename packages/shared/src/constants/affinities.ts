@@ -35,3 +35,13 @@ export const AFFINITY_NAMES: Readonly<Record<AffinityCode, string>> = Object.fre
  */
 export const isAffinityCode = (value: string): value is AffinityCode =>
   (AFFINITY_CODES as readonly string[]).includes(value);
+
+/** Colore di riferimento di ciascun tipo di mana (Design Brief §1), usato da UI e illustrazioni procedurali. */
+export const MANA_COLORS: Readonly<Record<ManaType, string>> = Object.freeze({
+  A: '#FDE68A',
+  M: '#38BDF8',
+  O: '#A855F7',
+  F: '#F87171',
+  S: '#4ADE80',
+  C: '#9CA3AF',
+});

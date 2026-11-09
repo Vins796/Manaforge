@@ -10,6 +10,7 @@ import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import Database from 'better-sqlite3';
 import { unwrap } from '@manaforge/shared';
 import { loadServerConfig } from '../src/config.js';
 import { startServer } from '../src/server.js';
@@ -59,6 +60,20 @@ describe('startServer', () => {
     writeFileSync(join(home2, '.manaforge', 'data', 'jwt.secret'), 'corto');
     expect(await startServer({ homeDir: home2, config: config() })).toMatchObject({ ok: false, error: expect.stringContaining('JWT_SECRET_INVALID') });
     rmSync(home2, { recursive: true, force: true });
+  });
+
+  it('importa il catalogo distribuito al primo avvio', async () => {
+    const server = unwrap(await startServer({ homeDir: home, config: config() }));
+    await server.close();
+    const db = new Database(join(home, '.manaforge', 'data', 'manaforge.db'), { readonly: true });
+    const { total } = db.prepare('SELECT count(*) AS total FROM cards').get() as { total: number };
+    db.close();
+    expect(total).toBeGreaterThanOrEqual(40);
+  });
+
+  it('non si avvia con un catalogo non valido', async () => {
+    const result = await startServer({ homeDir: home, config: config(), catalogSources: [{ schemaVersion: 1 }] });
+    expect(result).toMatchObject({ ok: false, error: expect.stringContaining('CATALOG_INVALID') });
   });
 
   it('fallisce se la porta è già occupata', async () => {

@@ -8,10 +8,10 @@
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
-import type { AffinityCode } from '@manaforge/shared';
+import { CARD_RARITIES, type AffinityCode, type KeywordCode } from '@manaforge/shared';
 
-/** Rarità ammesse per le carte del catalogo. */
-export const CARD_RARITIES = ['comune', 'non_comune', 'rara', 'mitica'] as const;
+/** Rarità ammesse per le carte del catalogo (fonte unica: `@manaforge/shared`). */
+export { CARD_RARITIES };
 /** Sezioni di un mazzo. */
 export const DECK_BOARDS = ['main', 'sideboard'] as const;
 /** Modalità di partita. */
@@ -53,7 +53,7 @@ export const cards = sqliteTable(
     power: integer('power'),
     toughness: integer('toughness'),
     keywords: text('keywords', { mode: 'json' })
-      .$type<string[]>()
+      .$type<KeywordCode[]>()
       .notNull()
       .default(sql`'[]'`),
     rarity: text('rarity', { enum: CARD_RARITIES }).notNull(),

@@ -1,7 +1,7 @@
 /**
  * @nature [ARCH]
  * @module Server
- * @description Composizione del server locale: percorsi dati, DB, segreto JWT, servizi, Fastify in ascolto.
+ * @description Composizione del server locale: percorsi dati, DB, sync del catalogo carte, segreto JWT, servizi, Fastify in ascolto.
  * @relatedDocs docs/catalog/API/01-authentication.md
  * @testFile apps/server/tests/server.test.ts
  */
@@ -13,6 +13,8 @@ import { createAuthService } from './auth/auth-service.js';
 import { createGoogleOAuth } from './auth/google-oauth.js';
 import { loadOrCreateJwtSecret } from './auth/jwt-secret.js';
 import { createTokenService } from './auth/token-service.js';
+import { BUNDLED_CATALOG_SOURCES, parseCatalogSources } from './catalog/card-catalog.js';
+import { syncCatalog } from './catalog/catalog-sync.js';
 import type { ServerConfig } from './config.js';
 import { openDatabase } from './db/db-client.js';
 import { resolveDataPaths } from './db/db-paths.js';
@@ -35,6 +37,8 @@ export interface StartServerOptions {
   readonly config: ServerConfig;
   readonly logger?: boolean;
   readonly fetch?: typeof globalThis.fetch;
+  /** Blocchi JSON del catalogo da importare; default il catalogo distribuito con l'app. */
+  readonly catalogSources?: readonly unknown[];
 }
 
 /**
@@ -43,12 +47,19 @@ export interface StartServerOptions {
  * @param options - Home dell'utente, configurazione e dipendenze iniettabili.
  * @returns Il server in ascolto, oppure un messaggio di errore di avvio.
  */
-export const startServer = async ({ homeDir, config, logger = false, fetch }: StartServerOptions): Promise<Result<RunningServer, string>> => {
+export const startServer = async ({ homeDir, config, logger = false, fetch, catalogSources = BUNDLED_CATALOG_SOURCES }: StartServerOptions): Promise<Result<RunningServer, string>> => {
   const paths = resolveDataPaths(homeDir);
   if (!paths.ok) return err(`Home directory non valida: ${paths.error.homeDir}`);
 
   const conn = openDatabase({ filename: paths.value.dbFile });
   if (!conn.ok) return err(`${conn.error.code}: ${conn.error.message}`);
+
+  const catalog = parseCatalogSources(catalogSources);
+  const synced = catalog.ok ? syncCatalog(conn.value.db, catalog.value) : catalog;
+  if (!synced.ok) {
+    conn.value.close();
+    return err(`${synced.error.code}: ${synced.error.message}`);
+  }
 
   const secret = loadOrCreateJwtSecret(join(paths.value.dataDir, JWT_SECRET_FILE));
   if (!secret.ok) {
@@ -64,6 +75,7 @@ export const startServer = async ({ homeDir, config, logger = false, fetch }: St
     : null;
 
   const app = await buildApp({ auth, tokens, google, allowedOrigins: config.allowedOrigins, logger });
+  app.log.info({ catalog: synced.value }, 'Catalogo carte sincronizzato');
   try {
     const url = await app.listen({ host: config.host, port: config.port });
     return ok({
