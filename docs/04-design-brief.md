@@ -1,97 +1,46 @@
-# 04 — Design Brief
+# 04. Brief di Design (Design System & HUD di gioco) — Manaforge
 
-## 1. Direzione
+> Il layout segue le convenzioni ergonomiche dei card game digitali (campo diviso, mano a ventaglio, pila laterale).
+> L'identità visiva — cornici, icone, simboli, font, avatar — è **originale**. Tema: **"Forgia arcana"**.
 
-Il layout segue le **convenzioni del genere** dei duel card game digitali (campo diviso in due metà,
-mano a ventaglio in basso, pila a lato, ritratti dei giocatori con punti vita), perché sono l'ergonomia attesa
-dai giocatori. L'**identità visiva è originale**: nessun asset, icona, cornice, font proprietario o palette
-riconducibile a MTG Arena o a Magic: The Gathering.
+## 1. Palette Colori (`[UI]`)
+* **Background Principale:** `#0B0E14` (Nero/Blu Abisso)
+* **Superfici Tavolo da Gioco (Battlefield Mat):** `#141923` (metà giocatore) / `#10141D` (metà avversario) divise da una linea luminosa centrale.
+* **Pannelli & Modali:** `#1C2230` con bordo `1px solid #334155`.
+* **CTA Principale (Pulsante Gioca / Azione Turno):** gradiente arancione `#F97316` → `#EA580C` con bagliore `0 0 15px rgba(249, 115, 22, 0.5)`.
+* **Pulsante Secondario / Risposta Priorità:** azzurro `#0284C7` → `#38BDF8`.
+* **Affinità di mana (originali)** — ciascuna con colore **e** forma distinta:
 
-Tema: **"Forgia arcana"** — metallo brunito, braci, cristalli di mana incandescenti su pietra scura.
+| Codice | Affinità | Tema di gioco | Colore | Simbolo |
+|---|---|---|---|---|
+| `A` | Alba | protezione, ordine | `#FDE68A` | sole a 8 raggi |
+| `M` | Marea | controllo, conoscenza | `#38BDF8` | onda doppia |
+| `O` | Ombra | sacrificio, ambizione | `#A855F7` | falce di luna |
+| `F` | Fiamma | aggressione, impulso | `#F87171` | fiamma a tre lingue |
+| `S` | Selva | crescita, forza | `#4ADE80` | foglia nervata |
+| `C` | Incolore | artefatti, Fonti generiche | `#9CA3AF` | esagono |
 
-## 2. Design tokens
+## 2. Tipografia e Dimensioni (`[UI]`)
+* **Font Titoli, Fasi e Punti Vita:** `Cinzel` (Google Fonts, licenza OFL).
+* **Font Interfaccia:** `Inter`; **testo delle regole sulle carte:** `Crimson Pro` (Google Fonts, licenza OFL).
+* **Proporzioni Carte:**
+  * **In Mano / Zoom Hover (`CardFullView`):** aspect ratio `63:88` (formato carta da gioco standard), cornice originale in metallo inciso
+    colorata secondo l'affinità, costo in alto a destra (cristalli sfaccettati), illustrazione procedurale, riga del tipo,
+    testo delle regole e placca Forza/Resistenza in ottone.
+  * **Sul Campo di Battaglia (`CardCompactView`):** carte compatte (aspect ratio `4:3`) con la sola illustrazione ritagliata,
+    nome in alto, icone delle parole chiave sul lato sinistro e badge `Forza / Resistenza` in basso a destra.
 
-```css
-:root {
-  /* superfici */
-  --mf-bg-0: #0d0f14;   /* fondo app */
-  --mf-bg-1: #161a22;   /* pannelli */
-  --mf-bg-2: #212734;   /* elementi elevati */
-  --mf-line: #2f3646;
-  /* testo */
-  --mf-text-1: #ece8df;
-  --mf-text-2: #a8a396;
-  /* accento forgia */
-  --mf-ember: #ff8a3d;
-  --mf-ember-glow: #ffb36b;
-  --mf-brass: #c9a45c;
-  /* affinità (originali) */
-  --mf-aff-ember: #e2553b;   /* Brace  — aggressione */
-  --mf-aff-tide: #3b8fe2;    /* Marea  — controllo */
-  --mf-aff-grove: #4fae5b;   /* Bosco  — crescita */
-  --mf-aff-dawn: #e8d27a;    /* Alba   — protezione */
-  --mf-aff-umbra: #8a5bd6;   /* Ombra  — sacrificio */
-  --mf-aff-neutral: #9aa0aa; /* Incolore */
-  /* stato */
-  --mf-ok: #4fc38a; --mf-warn: #f2b84b; --mf-danger: #ef5a5a;
-  /* tipografia */
-  --mf-font-display: "Cinzel", serif;        /* titoli, nomi carte (Google Fonts, OFL) */
-  --mf-font-ui: "Inter", system-ui, sans-serif;
-  /* spaziatura e raggi */
-  --mf-space-1: 4px; --mf-space-2: 8px; --mf-space-3: 12px; --mf-space-4: 16px; --mf-space-6: 24px;
-  --mf-radius-card: 10px; --mf-radius-ui: 6px;
-  /* movimento */
-  --mf-ease: cubic-bezier(.2,.8,.2,1); --mf-dur-fast: 120ms; --mf-dur: 240ms;
-}
-```
+## 3. Posizionamento HUD sul Campo di Battaglia (`[UI]`)
+* **Centro Basso / Centro Alto:** avatar originale del giocatore con cerchio dei Punti Vita (es. `20`), cliccabile come bersaglio.
+* **Bordo Inferiore:** mano del giocatore disposta a ventaglio (si solleva e ingrandisce di `1.6x` all'hover).
+* **Sinistra (Basso e Alto):** Mazzo (contatore carte residue), Cimitero (mostra la carta in cima, cliccabile per ispezionare la lista) ed Esilio.
+* **Destra Centrale (Pila):** colonna verticale degli oggetti in attesa di risoluzione, collegati da frecce curve animate in SVG ai bersagli.
+* **Angolo Basso a Destra:**
+  * **Phase Strip:** icone originali di `Mantenimento/Pescata`, `Principale 1`, `Combattimento`, `Principale 2`, `Fine Turno`
+    (cliccabili per inserire uno stop manuale).
+  * **Main Action Button:** grande pulsante contestuale (`Passa`, `Risolvi`, `Attacca con tutti`, `Avanti`, `Fine Turno`).
 
-Le affinità sono distinguibili anche per **forma del simbolo** (fiamma, onda, foglia, sole, luna) per accessibilità daltonici.
-
-## 3. Layout campo di battaglia (1920×1080 di riferimento, scalabile 16:9 / 16:10)
-
-```
-┌──────────────────────────────────────────────────────────────┬───────┐
-│ [Ritratto avversario ♥20]  mano avversario (dorso)  [mazzo/cimitero]│ PILA  │
-│ ── risorse avversario ───────────────────────────────────────│       │
-│ ── creature/permanenti avversario ───────────────────────────│ (ult. │
-│ ═════════════════ linea di combattimento ════════════════════│ 5 ogg)│
-│ ── creature/permanenti giocatore ────────────────────────────│       │
-│ ── risorse giocatore ────────────────────────────────────────│ LOG   │
-│ [Ritratto ♥20] [fasi turno]   MANO A VENTAGLIO   [bottone azione]   │       │
-└──────────────────────────────────────────────────────────────┴───────┘
-```
-
-- **Indicatore fasi**: barra orizzontale con icone originali; la fase corrente è illuminata dal colore ember.
-- **Bottone azione**: unico CTA contestuale in basso a destra; colore ember quando richiede attenzione.
-- **Ispezione carta**: hover 400 ms → ingrandimento laterale con testo completo e regole delle parole chiave.
-
-## 4. Anatomia della carta (originale)
-
-```
-┌───────────────────────┐  cornice in metallo inciso, colore = affinità
-│ Nome            (2)◆◆ │  costo: cristalli sfaccettati con numero generico
-│ ┌───────────────────┐ │
-│ │   illustrazione    │ │  arte originale / placeholder procedurale (SVG generato)
-│ └───────────────────┘ │
-│ Tipo — Sottotipo   ◇  │  simbolo rarità a forma di gemma
-│ testo regole          │
-│ testo di colore       │
-│                 [3/3] │  forza/resistenza in placca di ottone
-└───────────────────────┘
-```
-
-Fino alla disponibilità di illustrazioni originali, l'arte è **generata proceduralmente** (pattern SVG deterministici dal codice carta).
-
-## 5. Componenti chiave (catalogati in `docs/catalog/ui/`)
-
-`Card`, `CardZoom`, `Hand`, `Battlefield`, `ResourceRow`, `StackPanel`, `PhaseBar`, `PlayerPortrait`,
-`ActionButton`, `TargetArrow`, `DeckList`, `ManaCurveChart`, `CollectionGrid`, `PackOpening`, `Modal`, `Toast`.
-
-## 6. Movimento e audio
-- Animazioni ≤ 300 ms per azioni ricorrenti; effetti speciali ≤ 800 ms; tutte scalate dall'impostazione "velocità".
-- `prefers-reduced-motion` rispettato.
-- Audio: effetti sintetizzati/originali o da librerie CC0, catalogati con licenza.
-
-## 7. Accessibilità
-- Contrasto AA su tutto il testo UI, focus visibile (anello ember 2 px), tutte le azioni disponibili da tastiera.
-- Testi carta ridimensionabili (100–150%).
+## 4. Movimento e accessibilità
+* Animazioni ricorrenti ≤ 300 ms; effetti speciali ≤ 800 ms; `prefers-reduced-motion` rispettato.
+* Contrasto AA, focus visibile (anello arancione 2 px), tutte le azioni disponibili da tastiera.
+* Suoni originali o CC0, con licenza registrata in `docs/catalog/UI/`.

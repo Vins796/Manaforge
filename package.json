@@ -2,28 +2,25 @@
   "name": "manaforge",
   "version": "0.1.0",
   "private": true,
-  "description": "Manaforge — card game 1v1 desktop originale (vs Bot e P2P), completamente locale.",
+  "description": "Manaforge — card game 1v1 desktop originale (vs Bot e amico online), completamente locale.",
   "type": "module",
   "license": "UNLICENSED",
+  "packageManager": "pnpm@10.28.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "pnpm": ">=10"
   },
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
   "scripts": {
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "verify": "npm run typecheck && npm run test:coverage",
+    "verify": "pnpm typecheck && pnpm test:coverage",
     "clean": "tsc -b --clean"
   },
   "devDependencies": {
-    "@types/node": "^22.20.5",
-    "@vitest/coverage-v8": "^5.1.0",
-    "typescript": "^7.0.2",
-    "vitest": "^5.1.0"
+    "@vitest/coverage-v8": "5.1.0",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
   }
 }

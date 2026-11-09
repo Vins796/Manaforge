@@ -1,12 +1,12 @@
 # Catalogo della documentazione classificata
 
-Ogni voce è un file `<TAG>-<NNN>-<slug>.md` nella cartella della sua categoria (AGENT_RULES §3).
+Ogni elemento sviluppato è documentato in `docs/catalog/<NATURA>/<NN>-<slug>.md` (`.cursorrules §2`).
 
-| Tag | Cartella | Contenuto |
+| Natura | Contenuto | Indice |
 |---|---|---|
-| `[ARCH]` | [arch/](arch/README.md) | Decisioni architetturali (ADR) |
-| `[RULE]` | [rules/](rules/README.md) | Regole di gioco implementate |
-| `[API]`  | [api/](api/README.md) | Canali IPC, messaggi di rete, API pubbliche |
-| `[UI]`   | [ui/](ui/README.md) | Componenti e schermate |
-| `[DATA]` | [data/](data/README.md) | Tabelle, migrazioni, formati dati |
-| `[TEST]` | [test/](test/README.md) | Strategia e suite di test |
+| `[ARCH]` | Architettura & infrastruttura (ADR) | [ARCH/](ARCH/README.md) |
+| `[RULE]` | Regole di gioco & engine | [RULE/](RULE/README.md) |
+| `[API]`  | Autenticazione, REST, WebSocket, anti-cheat | [API/](API/README.md) |
+| `[UI]`   | Schermate, componenti, animazioni | [UI/](UI/README.md) |
+| `[DATA]` | Database, catalogo carte, cache immagini | [DATA/](DATA/README.md) |
+| `[TEST]` | Suite e piani di test | [TEST/](TEST/README.md) |

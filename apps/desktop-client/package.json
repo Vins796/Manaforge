@@ -1,0 +1,10 @@
+{
+  "name": "@manaforge/desktop-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Client desktop: React + Vite + Tailwind + Tauri.",
+  "type": "module",
+  "dependencies": {
+    "@manaforge/shared": "workspace:*"
+  }
+}

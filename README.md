@@ -1,28 +1,24 @@
 # Manaforge
 
-Card game collezionabile 1v1 **originale** per desktop (Windows e Linux): partite contro bot AI e online P2P,
-tutto in locale, senza server.
+Card game collezionabile 1v1 **originale** per desktop (Windows e Linux): partite contro il bot "Tizzo" o contro
+un amico online, tutto in locale, senza server a pagamento.
 
-> Prima di contribuire leggi [`AGENT_RULES.md`](AGENT_RULES.md) e la documentazione in [`docs/`](docs/).
+> Prima di contribuire leggi [`.cursorrules`](.cursorrules) e la documentazione in [`docs/`](docs/).
 
 ## Requisiti
-- Node.js ≥ 22 (`.nvmrc`), npm ≥ 10
+Node.js ≥ 22 (`.nvmrc`), pnpm ≥ 10 (`corepack enable`).
 
 ## Comandi
 ```bash
-npm install
-npm run typecheck   # tsc -b su tutti i package
-npm test            # Vitest, tutti i progetti
-npm run verify      # gate di fine step: typecheck + test con copertura
+pnpm install
+pnpm typecheck   # tsc -b su tutti i workspace
+pnpm test        # Vitest, tutti i progetti
+pnpm verify      # gate di fine step: typecheck + test con copertura
 ```
 
+## Struttura
+`packages/shared` · `packages/engine` · `apps/server` · `apps/desktop-client` — dettagli in `.cursorrules §1`.
+
 ## Documentazione
-| Documento | Contenuto |
-|---|---|
-| [01-prd](docs/01-prd.md) | Requisiti di prodotto |
-| [02-trd](docs/02-trd.md) | Stack, DB, sicurezza, packaging |
-| [03-app-flow](docs/03-app-flow.md) | Schermate e interazioni |
-| [04-design-brief](docs/04-design-brief.md) | Design system originale |
-| [05-backend-schema](docs/05-backend-schema.md) | Schema SQLite, stato in-memory, permessi |
-| [06-implementation-plan](docs/06-implementation-plan.md) | Piano a step e registro test |
-| [catalog](docs/catalog/README.md) | Documentazione classificata `[ARCH] [RULE] [API] [UI] [DATA] [TEST]` |
+[01-prd](docs/01-prd.md) · [02-trd](docs/02-trd.md) · [03-app-flow](docs/03-app-flow.md) · [04-design-brief](docs/04-design-brief.md) ·
+[05-backend-schema](docs/05-backend-schema.md) · [06-implementation-plan](docs/06-implementation-plan.md) · [catalog](docs/catalog/README.md)

@@ -1,126 +1,79 @@
-# 05 — Backend Schema (SQLite, stato in-memory, permessi)
+# 05. Schema del Back-end (SQLite + In-Memory GameState) — Manaforge
 
-## 1. Database SQLite (`<userData>/manaforge.db`)
+## 1. Schema Database Locale SQLite (`apps/server/prisma/schema.prisma`) — `[DATA]`
 
-Convenzioni: chiavi primarie `TEXT` UUID v7 (ordinabili), timestamp `INTEGER` epoch ms UTC, `STRICT` tables,
-`foreign_keys=ON`, `ON DELETE CASCADE` dal profilo verso i suoi dati.
+### Tabella `users`
+* `id`: String `@id @default(uuid())`
+* `email`: String `@unique`
+* `username`: String
+* `passwordHash`: String? (null se registrato solo con Google)
+* `googleId`: String? `@unique`
+* `avatar`: String `@default("forgiatore")` (avatar originali)
+* `createdAt`: DateTime `@default(now())`
 
-```sql
-CREATE TABLE schema_migrations (
-  version     INTEGER PRIMARY KEY,
-  name        TEXT    NOT NULL,
-  applied_at  INTEGER NOT NULL
-) STRICT;
+### Tabella `cards` (popolata dal catalogo originale in `apps/server/src/catalog/`)
+* `id`: String `@id` (codice carta, es. `"MF1-042"`)
+* `name`: String `@index`
+* `cost`: String (es. `"{2}{F}{S}"`)
+* `manaValue`: Int `@index`
+* `typeLine`: String `@index` (es. `"Creatura — Drago"`)
+* `rulesText`: String
+* `affinities`: String (JSON array: `["F"]`)
+* `affinityIdentity`: String (JSON array)
+* `power`: Int?
+* `toughness`: Int?
+* `keywords`: String (JSON array: `["ALATO", "EGIDA"]`)
+* `rarity`: String (`"comune" | "non_comune" | "rara" | "mitica"`)
+* `artSeed`: String (seed dell'illustrazione procedurale)
+* `localImageNormalPath`: String? (popolato quando l'immagine viene generata e cachata su disco)
+* `localImageCropPath`: String?
+* `catalogVersion`: String (hash del catalogo che ha prodotto la riga)
 
-CREATE TABLE profiles (
-  id                 TEXT PRIMARY KEY,
-  display_name       TEXT NOT NULL COLLATE NOCASE UNIQUE CHECK (length(display_name) BETWEEN 3 AND 24),
-  password_hash      BLOB NOT NULL,          -- scrypt 64 byte
-  password_salt      BLOB NOT NULL,          -- 16 byte
-  kdf_params         TEXT NOT NULL,          -- JSON {N,r,p,keylen}
-  public_key         BLOB NOT NULL,          -- Ed25519 raw 32 byte
-  private_key_enc    BLOB NOT NULL,          -- AES-256-GCM(ciphertext‖tag)
-  private_key_iv     BLOB NOT NULL,          -- 12 byte
-  private_key_salt   BLOB NOT NULL,          -- 16 byte (KDF chiave di cifratura)
-  failed_attempts    INTEGER NOT NULL DEFAULT 0,
-  locked_until       INTEGER,
-  created_at         INTEGER NOT NULL,
-  last_login_at      INTEGER
-) STRICT;
+### Tabella `decks`
+* `id`: String `@id @default(uuid())`
+* `userId`: String (FK → `users.id`, `onDelete: Cascade`)
+* `name`: String
+* `format`: String `@default("standard")`
+* `coverCardId`: String?
+* `updatedAt`: DateTime `@updatedAt`
 
-CREATE TABLE collection_cards (
-  profile_id  TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  card_code   TEXT NOT NULL,                 -- es. "FRG-042"
-  quantity    INTEGER NOT NULL CHECK (quantity >= 0),
-  PRIMARY KEY (profile_id, card_code)
-) STRICT;
+### Tabella `deck_cards`
+* `id`: String `@id @default(uuid())`
+* `deckId`: String (FK → `decks.id`, `onDelete: Cascade`)
+* `cardId`: String (FK → `cards.id`)
+* `quantity`: Int
+* `board`: String (`"main"` | `"sideboard"`)
+* Vincolo `@@unique([deckId, cardId, board])`
 
-CREATE TABLE decks (
-  id          TEXT PRIMARY KEY,
-  profile_id  TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  name        TEXT NOT NULL CHECK (length(name) BETWEEN 1 AND 40),
-  format      TEXT NOT NULL DEFAULT 'standard',
-  created_at  INTEGER NOT NULL,
-  updated_at  INTEGER NOT NULL,
-  UNIQUE (profile_id, name)
-) STRICT;
+### Tabella `matches`
+* `id`: String `@id @default(uuid())`
+* `hostUserId`: String
+* `guestUserId`: String? (`null` se contro Bot)
+* `mode`: String (`"bot"` | `"p2p"`)
+* `winnerUserId`: String?
+* `playedAt`: DateTime `@default(now())`
 
-CREATE TABLE deck_cards (
-  deck_id    TEXT NOT NULL REFERENCES decks(id) ON DELETE CASCADE,
-  card_code  TEXT NOT NULL,
-  quantity   INTEGER NOT NULL CHECK (quantity > 0),
-  PRIMARY KEY (deck_id, card_code)
-) STRICT;
+## 2. Architettura del `GameState` In-Memory (`packages/shared/src/types`) — `[RULE]` + `[DATA]`
+Durante il match, il Game Engine mantiene un oggetto **immutabile** aggiornato tramite `GameAction`:
+* `matchId`: string
+* `seed` / `rngState`: stato del PRNG deterministico (mescolamenti e scelte casuali)
+* `turnNumber`: number
+* `activePlayerId`: string (di chi è il turno)
+* `priorityPlayerId`: string (chi ha il diritto di agire in questo istante)
+* `phase`: `'READY' | 'UPKEEP' | 'DRAW' | 'MAIN_1' | 'COMBAT_BEGIN' | 'COMBAT_ATTACKERS' | 'COMBAT_BLOCKERS' | 'COMBAT_DAMAGE' | 'COMBAT_END' | 'MAIN_2' | 'END' | 'CLEANUP'`
+* `stack`: `StackItem[]` (oggetti in pila con `sourceCard`, `controllerId`, `targets[]`, `effect`)
+* `players`: mappa per ciascuno dei 2 giocatori contenente:
+  * `life`: number (inizia a 20)
+  * `sourcesPlayedThisTurn`: number
+  * `manaPool`: `{ A: number, M: number, O: number, F: number, S: number, C: number }`
+  * `zones`: `{ library: CardInstance[], hand: CardInstance[], battlefield: PermanentInstance[], graveyard: CardInstance[], exile: CardInstance[] }`
 
-CREATE TABLE matches (
-  id              TEXT PRIMARY KEY,
-  profile_id      TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  mode            TEXT NOT NULL CHECK (mode IN ('bot','p2p')),
-  opponent_name   TEXT NOT NULL,
-  opponent_key    BLOB,                      -- chiave pubblica avversario (p2p)
-  deck_id         TEXT REFERENCES decks(id) ON DELETE SET NULL,
-  result          TEXT CHECK (result IN ('win','loss','draw','aborted','desync')),
-  started_at      INTEGER NOT NULL,
-  ended_at        INTEGER,
-  protocol_ver    INTEGER NOT NULL,
-  cardset_hash    TEXT NOT NULL
-) STRICT;
-
-CREATE TABLE match_replays (
-  match_id     TEXT PRIMARY KEY REFERENCES matches(id) ON DELETE CASCADE,
-  seed         BLOB NOT NULL,                -- 16 byte
-  actions      BLOB NOT NULL,                -- JSON compresso (gzip) della lista azioni
-  final_hash   TEXT NOT NULL
-) STRICT;
-
-CREATE TABLE rewards (
-  id          TEXT PRIMARY KEY,
-  profile_id  TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  kind        TEXT NOT NULL CHECK (kind IN ('pack')),
-  opened      INTEGER NOT NULL DEFAULT 0 CHECK (opened IN (0,1)),
-  created_at  INTEGER NOT NULL
-) STRICT;
-
-CREATE TABLE settings (
-  profile_id  TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  key         TEXT NOT NULL,
-  value       TEXT NOT NULL,                 -- JSON validato da Zod
-  PRIMARY KEY (profile_id, key)
-) STRICT;
-
-CREATE INDEX idx_matches_profile ON matches(profile_id, started_at DESC);
-CREATE INDEX idx_decks_profile   ON decks(profile_id);
-```
-
-Le definizioni delle carte **non** stanno nel DB: sono dati versionati in `packages/cards` (hash del set = `cardset_hash`).
-
-## 2. Stato in-memory (processo main)
-
-```ts
-interface MainRuntimeState {
-  session: { profileId: string; privateKey: KeyObject; startedAt: number } | null;
-  match: {
-    id: string;
-    mode: 'bot' | 'p2p';
-    engineState: GameState;          // packages/engine
-    actionLog: SignedAction[];       // sorgente di verità per replay/lockstep
-    peer?: { publicKey: Uint8Array; seq: number; lastSeenAt: number };
-    bot?: { level: 'apprentice' | 'adept' | 'master' };
-  } | null;
-}
-```
-
-- La chiave privata decifrata esiste **solo** in memoria durante la sessione; azzerata al logout.
-- Il renderer riceve **viste filtrate** dello stato (`PlayerView`): mai la mano o il mazzo avversario.
-
-## 3. Permessi e confini di fiducia
-
-| Attore | Può | Non può |
-|---|---|---|
-| Renderer | invocare canali IPC whitelisted, ricevere `PlayerView` ed eventi | accedere a FS/DB/chiavi, leggere stato completo |
-| Preload | esporre `window.manaforge` tipizzato | contenere logica di dominio |
-| Main | DB, crittografia, engine autorevole, firma messaggi | eseguire codice remoto |
-| Peer remoto | inviare azioni firmate validate | modificare lo stato direttamente, vedere informazioni nascoste |
-
-Ogni canale IPC richiede (salvo `auth:*`) una **sessione attiva**; il main verifica che l'azione di gioco provenga
-dal giocatore che ha priorità. I canali sono definiti in `packages/shared/src/ipc` e documentati in `docs/catalog/api/`.
+## 3. Regole di Permesso e Anti-Cheat (`Fog of War`) — `[API]`
+* **Regola Database:** un utente può modificare/eliminare solo i `decks` con `userId === req.user.id`.
+* **Regola WebSocket Match:** prima di inviare il `GameState` via WebSocket a un giocatore, il server applica
+  `sanitizeGameStateForPlayer(state, playerId)`:
+  * oscura completamente `opponent.zones.library` e `opponent.zones.hand` (sostituendo le carte con `{ hidden: true }`),
+    così il client conosce solo il *numero* di carte nella mano e nel mazzo dell'avversario;
+  * oscura anche l'ordine della propria `library` e lo stato del PRNG.
+* **Regola Azioni:** il server accetta una `GameAction` solo se validata da Zod, proveniente dal socket autenticato del
+  giocatore indicato e legale secondo l'engine (es. priorità corretta).

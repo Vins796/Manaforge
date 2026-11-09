@@ -1,0 +1,14 @@
+{
+  "name": "@manaforge/server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend locale: Fastify + Socket.io + SQLite.",
+  "type": "module",
+  "dependencies": {
+    "@manaforge/engine": "workspace:*",
+    "@manaforge/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5"
+  }
+}

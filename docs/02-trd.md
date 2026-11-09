@@ -1,76 +1,42 @@
-# 02 — Technical Requirements Document (TRD)
+# 02. TRD (Technical Requirements Document) — Manaforge
 
-## 1. Stack tecnologico
+## 1. Stack Tecnologico (`[ARCH]`)
+* **Gestione Monorepo:** `pnpm` workspaces (`packages/shared`, `packages/engine`, `apps/server`, `apps/desktop-client`).
+* **Linguaggio:** TypeScript `strict: true` su tutto lo stack, ESM, project references (`tsc -b`).
+* **Runtime:** Node.js 22 LTS.
+* **Testing Framework:** `Vitest` per Unit/Integration test (Engine e Backend) + `React Testing Library` e `Playwright` per la UI.
+* **Desktop Wrapper (Store Windows & Linux):** **Tauri v2** — genera pacchetti `.msix` / `.exe` per Windows e `.flatpak` / `.AppImage` per Linux.
 
-| Livello | Scelta | Motivazione |
-|---|---|---|
-| Runtime | **Node.js 22 LTS** (dev/test), Node integrato in Electron (prod) | LTS, ESM nativo |
-| Linguaggio | **TypeScript** strict, ESM | Sicurezza dei tipi su motore complesso |
-| Desktop shell | **Electron** (ultima stabile al momento dello step 1.4) | Cross-platform Win/Linux, WebRTC nativo in Chromium |
-| Build | **electron-vite** (main/preload/renderer) | HMR, bundle separati |
-| UI | **React** + CSS Modules + design tokens CSS | Ecosistema, testabilità |
-| Stato UI | **Zustand** (store per schermata) | Leggero, nessun boilerplate |
-| Animazioni | **Framer Motion** + Canvas/WebGL (PixiJS) solo per effetti | Fluidità del campo di battaglia |
-| Validazione | **Zod** | Schemi condivisi IPC/rete/file |
-| Database | **SQLite** via **better-sqlite3** (WAL) | Sincrono, veloce, file singolo, zero server |
-| Crittografia | `node:crypto` (scrypt, Ed25519, SHA-256) nel main; WebCrypto nel renderer se necessario | Nessuna libreria esterna per primitive standard |
-| Rete P2P | **WebRTC DataChannel** (RTCPeerConnection nativo di Chromium) | NAT traversal, cifratura DTLS integrata |
-| Signaling | Manuale (codice invito base64url compresso) + scoperta LAN (UDP multicast) | Nessun server proprio |
-| STUN | Server STUN pubblici gratuiti configurabili; TURN opzionale fornito dall'utente | Costo zero |
-| Test | **Vitest** (unit/integration, progetti multipli), **Playwright** (E2E Electron) | Velocità, ESM nativo |
-| Qualità | ESLint (flat config) + Prettier, CI GitHub Actions (Win + Linux) | Uniformità |
-| Packaging | **electron-builder**: NSIS (Windows x64), AppImage + .deb (Linux x64) | Installer standard |
+## 2. Frontend (`[UI]`)
+* **Framework:** React + Vite (versione stabile corrente al momento dello step UI).
+* **Styling & Animazioni:** Tailwind CSS + Framer Motion (transizioni carte: pescata, esaurimento con rotazione di 15°, ingresso in pila, frecce di attacco/bersaglio).
+* **State Management:** `Zustand` sincronizzato con gli eventi WebSocket ricevuti dal server.
 
-## 2. Architettura logica
+## 3. Backend Locale & Rete (`[API]`)
+* **Server Integrato:** Node.js + Fastify + `Socket.io`, avviato automaticamente in background dall'app desktop come
+  **sidecar Tauri** (binario Node Single Executable Application generato in fase di packaging).
+* **Connessione Amico a Costo Zero:** LAN virtuale (Tailscale/ZeroTier) o tunnel effimero gratuito `cloudflared`
+  per permettere all'amico di connettersi via WebSocket (`wss://`) direttamente al PC che fa da Host.
+* **Autorità di gioco:** il motore gira solo sul server dell'Host; i client inviano intenzioni (`GameAction`) e ricevono
+  stati filtrati (`sanitizeGameStateForPlayer`).
 
-```
-┌────────────────────── apps/desktop ──────────────────────┐
-│ renderer (React, sandbox)  ⇄ preload (contextBridge) ⇄  main │
-│   UI, input, animazioni        API tipizzata             │  ├─ AuthService / ProfileService
-│                                                          │  ├─ db (better-sqlite3)
-│                                                          │  ├─ MatchHost (engine + ai)
-└──────────────────────────────────────────────────────────┘  └─ net (signaling LAN, chiavi)
-           │ WebRTC DataChannel (nel renderer, messaggi firmati dal main)
-           ▼
-       peer remoto
-```
+## 4. Database e Storage Locale (`[DATA]`)
+* **Database:** **SQLite** locale (file `~/.manaforge/data/manaforge.db`) gestito tramite **Prisma ORM**
+  (alternativa valutata: Drizzle — decisione definitiva con ADR allo step 1.2). Zero configurazione richiesta dall'utente.
+* **Catalogo carte (originale):**
+  * Le definizioni delle carte sono file JSON versionati in `apps/server/src/catalog/` e validati con Zod.
+  * Al primo avvio (o quando cambia l'hash del catalogo) vengono importati nella tabella SQLite `cards`.
+* **Gestione Immagini Carte (On-Demand Disk Cache):**
+  * Le illustrazioni sono generate proceduralmente (SVG deterministico dal `artSeed` della carta) solo quando una carta
+    viene visualizzata o inserita in un mazzo, e salvate in `~/.manaforge/cache/images/` per il caricamento istantaneo offline.
+  * In futuro potranno essere sostituite da illustrazioni originali con licenza, mantenendo lo stesso percorso di cache.
 
-- Il **motore** (`packages/engine`) è una libreria pura: `applyAction(state, action) → Result<{state, events}>`.
-- La partita è **event-sourced**: lo stato è derivabile da `seed + lista azioni`. Questo abilita replay, lockstep e undo controllato.
-- Il main process è l'autorità locale: valida, firma e persiste. Il renderer visualizza eventi e invia intenzioni.
+## 5. Autenticazione (`[API]`)
+* **Manuale:** password hashata con `argon2id`, sessione gestita tramite token `JWT` (firmato con segreto generato
+  localmente al primo avvio e salvato in `~/.manaforge/data/`).
+* **Google Login:** flusso `OAuth 2.0` con PKCE per app desktop (loopback redirect), tramite Client ID gratuito di Google Cloud Console.
 
-## 3. Database locale
-
-- File: `<userData>/manaforge.db` (SQLite, `journal_mode=WAL`, `foreign_keys=ON`).
-- Migrazioni SQL versionate in `packages/db/src/migrations/NNNN_nome.sql`, applicate all'avvio in transazione, tabella `schema_migrations`.
-- Dettaglio tabelle in `docs/05-backend-schema.md`.
-- Backup automatico prima di ogni migrazione (`manaforge.db.bak-<versione>`).
-
-## 4. Sicurezza
-
-- Password: `scrypt` (N=2^15, r=8, p=1, keylen 64) + salt 16 byte, confronto `timingSafeEqual`.
-- Chiave privata Ed25519 del profilo cifrata con AES-256-GCM, chiave derivata dalla password (scrypt, salt distinto).
-- Electron: `contextIsolation`, `sandbox`, `nodeIntegration: false`, `webSecurity: true`, CSP `default-src 'self'`, navigazione esterna bloccata, `setWindowOpenHandler` → deny.
-- Messaggi di rete: schema Zod + firma Ed25519 + numero di sequenza monotono (anti-replay); dimensione massima 64 KiB.
-
-## 5. Determinismo del motore
-
-- PRNG **xoshiro128\*\*** con seed a 128 bit; stato del PRNG parte dello stato di gioco.
-- Seed P2P = `SHA-256(seedA ‖ seedB)` con commit-reveal: ciascun peer pubblica `SHA-256(seed)` prima di rivelarlo.
-- Identificatori degli oggetti assegnati da contatore monotono nello stato.
-- Hash di stato: SHA-256 della serializzazione canonica (chiavi ordinate) — calcolato in `net`, non nel motore.
-
-## 6. Packaging e distribuzione
-
-| OS | Target | Note |
-|---|---|---|
-| Windows 10/11 x64 | NSIS installer + portable | Rebuild `better-sqlite3` per l'ABI di Electron (`electron-builder install-app-deps`) |
-| Linux x64 | AppImage, .deb | Testato su Ubuntu 22.04+/Fedora 39+ |
-
-- Nessun auto-update da server proprio; eventuale controllo versione tramite GitHub Releases (opzionale, disattivabile).
-- CI: matrice `ubuntu-latest` + `windows-latest`: typecheck, test, build, E2E headless (xvfb su Linux).
-
-## 7. Vincoli di ambiente
-
-- `engines.node >= 22`. Package manager: **npm workspaces** (nessuno strumento aggiuntivo).
-- I package in `packages/*` sono consumati come sorgenti TS dai test (alias Vitest) e compilati con `tsc -b` per il typecheck.
+## 6. Sicurezza
+* Validazione Zod di ogni payload REST e Socket.io; rate limit sugli endpoint di autenticazione.
+* Tauri: allowlist minima dei comandi, CSP restrittiva.
+* Nessun segreto nel repository; `.env` escluso da git.

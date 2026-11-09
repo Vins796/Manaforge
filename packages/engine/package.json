@@ -2,14 +2,10 @@
   "name": "@manaforge/engine",
   "version": "0.1.0",
   "private": true,
-  "description": "Motore regole deterministico e puro (zero I/O).",
+  "description": "Motore di regole puro e deterministico (zero dipendenze UI/DB).",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
   },
-  "files": ["dist"],
-  "dependencies": { "@manaforge/shared": "0.1.0","@manaforge/cards": "0.1.0" }
+  "dependencies": { "@manaforge/shared": "workspace:*" }
 }

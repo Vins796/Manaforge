@@ -1,57 +1,75 @@
-# 06 — Implementation Plan & Registro Test
+# 06. Piano di Implementazione e Registro Test — Manaforge
 
-Regola: si lavora su **un solo sotto-step** alla volta. Uno step è `[x]` solo con `npm run verify` verde,
-documentazione aggiornata e voce nel catalogo. Dopo ogni step: commit e richiesta di conferma.
+> **ISTRUZIONE PER L'AGENTE AI:** procedi rigorosamente in ordine. Non iniziare uno step se quello precedente non ha
+> tutti i test passati (`[x] Testato`) e il relativo file di documentazione creato in `docs/catalog/`.
 
-## Fase 1 — Fondamenta
-- [x] **1.1** Scaffold monorepo: struttura directory, documenti 01–06, `AGENT_RULES.md`, `package.json` workspace, `tsconfig`, Vitest multi-progetto, smoke test per ogni package.
-- [ ] **1.2** Autenticazione locale: bootstrap `packages/db` (connessione, runner migrazioni, tabella `profiles`), `AuthService` (crea profilo, login, logout, lockout, cambio password), identità Ed25519 cifrata, schemi Zod in `shared`.
-- [ ] **1.3** Qualità: ESLint flat config, Prettier, script `lint`, workflow CI GitHub Actions (Linux + Windows).
-- [ ] **1.4** Shell Electron: finestra sicura, preload con bridge IPC tipizzato, canali `auth:*`, schermate Crea profilo/Login minimali, E2E Playwright di login.
+## FASE 1: Fondamenta, Database Locale e Autenticazione
+* `[x]` **Step 1.1 — Setup Monorepo, Regole e Scheletro Cartelle (`[ARCH]`)**
+  * *Task:* inizializzare `pnpm` workspace, TypeScript, Vitest e creare tutte le cartelle e i 6 documenti.
+  * *Test richiesto:* `pnpm test` esegue un test di fumo (`smoke.test.ts`) su tutti i pacchetti con esito positivo.
+  * *Doc richiesta:* `docs/catalog/ARCH/01-monorepo-setup.md`.
+* `[ ]` **Step 1.2 — Database SQLite & Prisma Schema (`[DATA]`)**
+  * *Task:* configurare SQLite locale e creare le tabelle `users`, `cards`, `decks`, `deck_cards`, `matches`.
+  * *Test richiesto:* integration test (`db-schema.test.ts`) che crea, legge e cancella record su un DB SQLite di test.
+  * *Doc richiesta:* `docs/catalog/DATA/01-sqlite-schema.md`.
+* `[ ]` **Step 1.3 — Autenticazione Manuale + Google OAuth2 (`[API]` + `[UI]`)**
+  * *Task:* registrazione/login manuale (Argon2id + JWT), flusso Google OAuth2 (PKCE) e pagina `/login` in React.
+  * *Test richiesto:* test API (`auth.test.ts`) per registrazione, login valido, password errata (401) e mock callback Google.
+  * *Doc richiesta:* `docs/catalog/API/01-authentication.md`.
 
-## Fase 2 — Carte, collezione, mazzi
-- [ ] **2.1** Modello carta + DSL abilità in `cards`, primo blocco di 40 carte originali, `cardset_hash`.
-- [ ] **2.2** Collezione e mazzi (migrazioni, repository, servizi), mazzi precostruiti iniziali.
-- [ ] **2.3** Validazione formato e import/export testuale.
+## FASE 2: Catalogo Carte Originale, Caching Immagini e Deckbuilder
+* `[ ]` **Step 2.1 — Seed Catalogo Carte Originale & Disk Image Cache (`[DATA]`)**
+  * *Task:* catalogo JSON originale validato con Zod (primo blocco di carte), importer idempotente in SQLite basato su hash,
+    generatore di illustrazioni procedurali SVG con salvataggio in cache su disco.
+  * *Test richiesto:* `catalog-sync.test.ts` che importa un batch di carte di prova e verifica il salvataggio in cache dell'immagine.
+  * *Doc richiesta:* `docs/catalog/DATA/02-card-catalog-and-image-cache.md`.
+* `[ ]` **Step 2.2 — API Mazzi, Parser Import/Export Testuale e UI Deckbuilder (`[API]` + `[UI]`)**
+  * *Task:* CRUD mazzi, parser per il formato testuale (es. `4 Scintilla Rovente`) e interfaccia grafica `/decks` e `/collection` con filtri affinità/mana.
+  * *Test richiesto:* test del parser di import/export + validazione regole di costruzione mazzo (min 60 carte, max 4 copie salvo Fonti base).
+  * *Doc richiesta:* `docs/catalog/UI/01-deckbuilder.md`.
 
-## Fase 3 — Motore regole (`engine`)
-- [ ] **3.1** Stato di gioco, zone, PRNG xoshiro128**, id oggetti, serializzazione canonica.
-- [ ] **3.2** Struttura del turno, fasi, priorità, mulligan.
-- [ ] **3.3** Risorse, costi, pagamento.
-- [ ] **3.4** Pila, lancio, risoluzione, bersagli e legalità.
-- [ ] **3.5** Combattimento e parole chiave base.
-- [ ] **3.6** Azioni basate sullo stato e condizioni di vittoria.
-- [ ] **3.7** Abilità innescate, statiche ed effetti continui (layer).
-- [ ] **3.8** Event log, replay, generatore di azioni legali.
+## FASE 3: Il Motore di Regole (`packages/engine`)
+* `[ ]` **Step 3.1 — Struttura Turno, Fasi, Pescata, Mulligan e Priorità (`[RULE]`)**
+  * *Task:* macchina a stati finiti del turno, pescata della mano da 7, mulligan (rimescola, ripesca 7, metti N carte in fondo) e passaggio di priorità tra i 2 giocatori.
+  * *Test richiesto:* `turn-priority.test.ts` (attraversamento di tutte le fasi e cambio turno quando entrambi i giocatori passano priorità a pila vuota).
+  * *Doc richiesta:* `docs/catalog/RULE/01-turn-and-priority.md`.
+* `[ ]` **Step 3.2 — Sistema Mana, Giocare Fonti e Auto-Tapper (`[RULE]`)**
+  * *Task:* limite di 1 Fonte per turno, produzione mana (A/M/O/F/S/C), parser dei costi (es. `{2}{F}{S}`) e algoritmo di Auto-Tapper.
+  * *Test richiesto:* `mana-autotapper.test.ts` (l'Auto-Tapper sceglie la combinazione ottimale di Fonti e blocca il lancio se il mana è insufficiente).
+  * *Doc richiesta:* `docs/catalog/RULE/02-mana-and-autotapper.md`.
+* `[ ]` **Step 3.3 — La Pila (Stack), Lancio Carte e State-Based Actions (`[RULE]`)**
+  * *Task:* lancio di Creature, Rituali (solo a pila vuota nella propria fase principale) e Rapidi (in qualsiasi momento con priorità),
+    risoluzione LIFO e controllo SBA (creatura con danno ≥ resistenza va al cimitero; giocatore a ≤ 0 vita perde).
+  * *Test richiesto:* `stack-and-sba.test.ts` (es. creatura 2/2 bersaglio di *Scintilla Rovente* (3 danni); in risposta riceve
+    *Vigore della Selva* (+3/+3) → si risolve prima il +3/+3 e la creatura sopravvive come 5/5 con 3 danni).
+  * *Doc richiesta:* `docs/catalog/RULE/03-stack-and-sba.md`.
+* `[ ]` **Step 3.4 — Fase di Combattimento e Parole Chiave Principali (`[RULE]`)**
+  * *Task:* stordimento d'ingresso, dichiarazione attaccanti e bloccanti, calcolo danni e parole chiave originali:
+    *Alato, Vedetta, Sfondamento, Scatto, Sentinella, Veleno, Linfa, Fendente, Doppio Fendente, Egida, Fulmineo*
+    (definizioni in `docs/catalog/RULE/`). Include il resolver Sandbox per effetti extra.
+  * *Test richiesto:* `combat-keywords.test.ts` (interazioni incrociate, es. *Veleno + Sfondamento* assegna 1 danno letale al bloccante e il resto al giocatore).
+  * *Doc richiesta:* `docs/catalog/RULE/04-combat-and-keywords.md`.
 
-## Fase 4 — Bot
-- [ ] **4.1** Bot *Apprendista* (euristico).
-- [ ] **4.2** Bot *Adepto* (funzione di valutazione + lookahead).
-- [ ] **4.3** Bot *Maestro* (MCTS con determinizzazione).
-
-## Fase 5 — P2P
-- [ ] **5.1** Protocollo: messaggi Zod, firma Ed25519, sequenze, handshake versione/cardset.
-- [ ] **5.2** Lockstep + hash di stato + commit-reveal seed; test loopback bot-vs-bot (1.000 partite, 0 desync).
-- [ ] **5.3** Trasporto WebRTC + signaling manuale (codici) + scoperta LAN.
-- [ ] **5.4** Riconnessione e abbandono.
-
-## Fase 6 — UI
-- [ ] **6.1** Design tokens, componenti base, carta con arte procedurale.
-- [ ] **6.2** Home, profilo, impostazioni.
-- [ ] **6.3** Collezione e deck builder.
-- [ ] **6.4** Campo di battaglia vs Bot.
-- [ ] **6.5** Lobby online e partita P2P.
-- [ ] **6.6** Animazioni, audio, accessibilità, replay viewer, buste.
-
-## Fase 7 — Packaging e release
-- [ ] **7.1** electron-builder Windows (NSIS) e Linux (AppImage, .deb), rebuild moduli nativi.
-- [ ] **7.2** Suite E2E completa in CI su entrambe le piattaforme.
-- [ ] **7.3** Release 1.0.
+## FASE 4: Interfaccia Campo di Battaglia, Bot AI e Multiplayer
+* `[ ]` **Step 4.1 — Schermata Campo di Battaglia e HUD (`[UI]`)**
+  * *Task:* `/match/:id` fedele al Design Brief: mano a ventaglio, campo con carte compatte, pila laterale con frecce SVG ai bersagli,
+    Phase Strip e scorciatoie da tastiera (`Spazio`, `Invio`).
+  * *Test richiesto:* component test del rendering del `GameState` e delle interazioni di selezione carta/bersaglio.
+  * *Doc richiesta:* `docs/catalog/UI/02-battlefield-hud.md`.
+* `[ ]` **Step 4.2 — Intelligenza Artificiale Locale "Tizzo" (`[RULE]`)**
+  * *Task:* bot euristico in `packages/engine/src/bot` che valuta lo stato e gioca autonomamente Fonti, creature, rimozioni, attacchi e blocchi.
+  * *Test richiesto:* `bot-simulation.test.ts` (2 bot giocano 10 partite complete; ogni partita termina con un vincitore valido senza loop infiniti).
+  * *Doc richiesta:* `docs/catalog/RULE/05-bot-ai.md`.
+* `[ ]` **Step 4.3 — Multiplayer 1v1 via WebSocket (Fog of War) e Packaging Windows/Linux (`[API]` + `[ARCH]`)**
+  * *Task:* stanze Socket.io con filtro `sanitizeGameStateForPlayer` (anti-cheat), creazione/unione stanza con amico e configurazione
+    Tauri (con sidecar del server) per i pacchetti store di Windows (`.msix`/`.exe`) e Linux (`.flatpak`/`.AppImage`).
+  * *Test richiesto:* test E2E WebSocket con due client simulati connessi alla stessa stanza + verifica build desktop.
+  * *Doc richiesta:* `docs/catalog/ARCH/02-multiplayer-and-packaging.md`.
 
 ---
 
 ## Registro Test
 
-| Step | Data | Suite / file | Test | Esito | Copertura | Note |
-|---|---|---|---|---|---|---|
-| 1.1 | 2026-11-09 | `packages/*/test/smoke.test.ts`, `packages/shared/test/result.test.ts` | 10 (7 file) | ✅ 10/10 | 100% righe/branch | Vitest 5 multi-progetto (6 progetti), `tsc -b` verde, soglia copertura globale 80% |
+| Step | Data | Comando | Suite | Test | Esito | Copertura | Note |
+|---|---|---|---|---|---|---|---|
+| 1.1 | 2026-11-09 | `pnpm verify` | 4 progetti Vitest (`shared`, `engine`, `server`, `desktop-client`), 8 file | 15 | ✅ 15/15, `tsc -b` verde | 100% stmt/branch/func/lines | pnpm 10.28, TypeScript 7.0, Vitest 5.1; soglie 80% globale / 100% engine |

@@ -13,3 +13,4 @@ release/
 !.vscode/extensions.json
 test-results/
 playwright-report/
+.pnpm-store/

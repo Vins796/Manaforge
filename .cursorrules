@@ -1,10 +1,154 @@
-# Manaforge — regole per agenti AI / IDE
-# La fonte di verità completa è AGENT_RULES.md: leggila prima di modificare qualsiasi file.
+# .cursorrules — Regole Architetturali, Gerarchia e Testing (Manaforge)
 
-- Prodotto originale (genere: card game 1v1 a risorse). Vietati nomi, testi, arte e trade dress di Magic: The Gathering / MTG Arena.
-- Rispetta l'albero directory di AGENT_RULES.md §1. Niente file fuori posto.
-- TypeScript strict, ESM, Result<T,E> per errori di dominio, Zod ai confini (IPC, rete, file).
-- packages/engine è puro e deterministico: niente I/O, niente Math.random/Date.now.
-- TSDoc su ogni export + voce in docs/catalog/<arch|rules|api|ui|data|test>/.
-- TDD: nessuno step è finito senza test verdi (`npm run verify`).
-- Un sotto-step alla volta da docs/06-implementation-plan.md; a fine step spunta [x], aggiorna il registro test e chiedi conferma.
+> Fonte di verità per chiunque (umano o agente AI) scriva codice in questo repository.
+> Leggere prima di modificare qualsiasi file. In caso di conflitto con altri documenti vince questo file.
+
+## 0. Politica sui contenuti originali (vincolante)
+
+Manaforge è un **card game 1v1 originale** del genere "duel TCG a risorse". Si replicano le **meccaniche di genere**
+(risorse colorate, pila, priorità, fasi del turno, combattimento, parole chiave), non un prodotto esistente.
+
+È vietato inserire nel repository, nel codice o negli asset:
+- nomi, testi, illustrazioni, simboli, set, avatar, nomi di bot, suoni, font proprietari, loghi o trade dress
+  di *Magic: The Gathering* / *MTG Arena* (marchi di Wizards of the Coast);
+- dati o immagini di carte provenienti da Scryfall o da altre fonti di carte Magic;
+- formati di import/export con identificativi o codici set di Magic.
+
+Carte, parole chiave, affinità di mana, bot e identità visiva sono definiti dai documenti in `docs/`
+(vedi `docs/catalog/ARCH/00-original-content-policy.md`).
+
+## 1. Gerarchia Obbligatoria delle Cartelle e dei File
+
+Monorepo modulare con **pnpm workspaces**. Ogni file risiede esclusivamente nella propria directory di competenza:
+
+```text
+manaforge/
+├── .cursorrules                    # Regole globali per l'Agente AI (questo file)
+├── package.json                    # Root workspace configuration
+├── pnpm-workspace.yaml             # Elenco dei workspace pnpm
+├── tsconfig.base.json              # Configurazione TypeScript condivisa
+├── tsconfig.json                   # Solution file (project references, `tsc -b`)
+├── vitest.config.ts                # Runner di test multi-progetto
+│
+├── docs/                           # FONTE DI VERITÀ E DOCUMENTAZIONE
+│   ├── 01-prd.md                   # Requisiti del Prodotto
+│   ├── 02-trd.md                   # Requisiti Tecnici
+│   ├── 03-app-flow.md              # Flusso Schermate e Interazioni
+│   ├── 04-design-brief.md          # Design System e HUD di gioco
+│   ├── 05-backend-schema.md        # Schema DB e GameState
+│   ├── 06-implementation-plan.md   # Piano sequenziale e Stato Avanzamento
+│   └── catalog/                    # DOCUMENTAZIONE CLASSIFICATA PER NATURA
+│       ├── ARCH/                   # Decisioni architetturali (ADR)
+│       ├── RULE/                   # Meccaniche e regole di gioco implementate
+│       ├── API/                    # Contratti REST e WebSocket Events
+│       ├── UI/                     # Componenti visivi, HUD e animazioni
+│       ├── DATA/                   # Schemi DB, migrazioni, catalogo carte e cache immagini
+│       └── TEST/                   # Report e piani di test per modulo
+│
+├── packages/
+│   ├── shared/                     # Tipi, costanti, contratti condivisi FE/BE/Engine
+│   │   ├── src/
+│   │   │   ├── types/              # GameState, Card, Player, Zones, Actions, Result
+│   │   │   ├── constants/          # Fasi del turno, Affinità di mana, Keywords
+│   │   │   └── schemas/            # Validatori Zod per payload API/Socket
+│   │   └── tests/
+│   │
+│   └── engine/                     # MOTORE DI REGOLE (Puro TypeScript, 0 dipendenze UI/DB)
+│       ├── src/
+│       │   ├── core/               # GameLoop, TurnManager, PhaseManager, Priority
+│       │   ├── stack/              # Gestione Pila (Stack) e risoluzione LIFO
+│       │   ├── mana/               # ManaPool, CostParser, AutoTapper
+│       │   ├── combat/             # Dichiarazione attaccanti/bloccanti, calcolo danni
+│       │   ├── sba/                # State-Based Actions (morte creature, 0 punti vita)
+│       │   ├── keywords/           # Implementazione delle parole chiave originali
+│       │   ├── cards/              # Script specifici carte + Fallback Sandbox Resolver
+│       │   └── bot/                # AI "Tizzo" (valutazione euristica dello stato e mosse)
+│       └── tests/                  # Test unitari e simulazioni di partita (100% coverage)
+│           ├── unit/
+│           └── scenarios/
+│
+└── apps/
+    ├── server/                     # Backend Locale (Fastify + Socket.io + SQLite)
+    │   ├── prisma/                 # Schema SQLite (schema.prisma) e migrazioni
+    │   ├── src/
+    │   │   ├── auth/               # Login manuale (JWT + Argon2id) e Google OAuth2
+    │   │   ├── db/                 # Connessione SQLite e Repository pattern
+    │   │   ├── catalog/            # Seed del catalogo carte originale e cache immagini su disco
+    │   │   ├── routes/             # Endpoint REST (Auth, Decks, Collection)
+    │   │   └── ws/                 # Stanze multiplayer 1v1 e Bot Match
+    │   └── tests/                  # Integration test su DB in-memory e API
+    │
+    └── desktop-client/             # Frontend (React + Vite + Tailwind + Framer Motion + Tauri)
+        ├── src-tauri/              # Packaging nativo Windows (.msix/.exe) e Linux (.flatpak/.AppImage)
+        ├── src/
+        │   ├── assets/             # Font (licenza OFL), icone affinità originali, suoni originali/CC0
+        │   ├── components/
+        │   │   ├── ui/             # Bottoni, Modali, Filtri affinità, Badge
+        │   │   ├── cards/          # CardFullView (Mano/Hover), CardCompactView (Campo)
+        │   │   └── battlefield/    # HandFan, ManaPoolHUD, StackZone, PhaseStrip, AvatarHUD
+        │   ├── pages/              # LoginPage, HomeHub, DeckbuilderPage, MatchPage
+        │   ├── store/              # Zustand stores (useAuthStore, useDeckStore, useGameStore)
+        │   └── services/           # Client REST e Socket.io listener
+        └── tests/                  # Component test (React Testing Library)
+```
+
+Regole:
+1. **Non creare file fuori da questo albero.** Una nuova cartella richiede prima un ADR in `docs/catalog/ARCH/` e l'aggiornamento di questo file.
+2. Dipendenze ammesse: `shared ← engine`, `shared + engine ← server`, `shared ← desktop-client`.
+   `packages/engine` **non** importa mai React, DOM, database, rete o API Node (`fs`, `net`, ecc.).
+3. Il client non accede mai al DB: passa sempre dalle API REST/WebSocket del server.
+
+## 2. Standard di Classificazione e Documentazione Obbligatoria
+
+Ogni elemento sviluppato è classificato secondo una di queste 6 nature e documentato sia nel codice
+(header standard) sia nella cartella `docs/catalog/<NATURA>/`:
+
+1. `[ARCH]` Architettura & Infrastruttura: configurazioni monorepo, packaging Tauri, connettività P2P/tunnel.
+2. `[RULE]` Regole di gioco & Game Engine: fasi, pila, priorità, mana, combattimento, parole chiave, bot.
+3. `[DATA]` Database & Caching: tabelle SQLite, query, seed del catalogo carte, cache immagini su disco.
+4. `[API]` Autenticazione, REST & WebSockets: rotte Fastify, OAuth Google, eventi Socket.io, filtro anti-cheat (Fog of War).
+5. `[UI]` Interfaccia & UX: schermate, componenti React, animazioni delle carte, scorciatoie da tastiera.
+6. `[TEST]` Qualità & Validazione: suite unitarie, di integrazione e scenari completi di gioco.
+
+**Template header obbligatorio in cima a ogni file di codice** (sorgenti e test):
+
+```ts
+/**
+ * @nature [RULE | DATA | API | UI | ARCH | TEST]
+ * @module NomeModulo
+ * @description Spiegazione chiara della responsabilità del file.
+ * @relatedDocs docs/catalog/RULE/nome-file.md
+ * @testFile packages/engine/tests/unit/nome-file.test.ts
+ */
+```
+
+Oltre all'header, ogni simbolo esportato ha TSDoc (`@param`, `@returns`, `@throws` dove applicabile).
+File di catalogo: `docs/catalog/<NATURA>/<NN>-<slug>.md`, numerazione progressiva per natura.
+
+## 3. Standard di Codice
+
+- TypeScript `strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`; ESM ovunque; niente `any`.
+- Errori di dominio attesi → `Result<T, E>` (`@manaforge/shared`); `throw` solo per invarianti violate.
+- Ogni input da HTTP, WebSocket o file è validato con **Zod** al confine.
+- Engine **deterministico**: niente `Math.random`/`Date.now`; RNG solo tramite PRNG con seed contenuto nello stato.
+- Segreti mai in chiaro nel repository (`.env` escluso da git); password con Argon2id.
+
+## 4. Protocollo di Testing Obbligatorio (Definition of Done)
+
+Nessun file o funzionalità è finito se non rispetta queste regole:
+
+1. **Regola 1-a-1:** ogni file in `src/` ha il suo corrispondente `.test.ts` (o `.test.tsx`) nella cartella `tests/`
+   dello stesso pacchetto, con lo stesso percorso relativo (es. `src/types/result.ts` → `tests/types/result.test.ts`;
+   per `engine`: `src/mana/cost-parser.ts` → `tests/unit/mana/cost-parser.test.ts`).
+   Eccezione: i barrel `src/index.ts` sono coperti da `tests/smoke.test.ts`.
+2. **Isolamento del Game Engine:** `packages/engine` non dipende da React né dal database; deve simulare un'intera
+   partita in memoria in **meno di 50 ms** nei test Vitest. Copertura richiesta: **100%**.
+3. **Blocco di Avanzamento:** se anche un solo test fallisce (`pnpm test`) o il typecheck fallisce (`pnpm typecheck`),
+   è vietato procedere allo step successivo. Prima si corregge il bug.
+
+## 5. Flusso di lavoro per step
+
+1. Un solo sotto-step di `docs/06-implementation-plan.md` alla volta.
+2. Ciclo: test rosso → implementazione → test verde → refactor → header + TSDoc → voce di catalogo.
+3. A fine step: `pnpm verify`, aggiornare il Registro Test in `06-implementation-plan.md`, spuntare `[x]`,
+   commit con Conventional Commits, push su `develop`, **fermarsi e chiedere conferma**.
