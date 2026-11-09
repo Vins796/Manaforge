@@ -10,7 +10,7 @@ mf1-prima-fusione.json ──Zod──▶ CardCatalog ──toCardRecord──�
                                                                    │
 startServer ─▶ syncCatalog(db, catalog) ─▶ tabella `cards` (catalog_version = version)
                                                                    │
-(on-demand, step 2.2: API/UI) ImageCache.ensureCardImages(id) ─▶ ~/.manaforge/cache/images/<id>-<impronta>-{normal,crop}.svg
+(on-demand, GET /api/cards/:id/image/:variant) ImageCache.ensureCardImages(id) ─▶ ~/.manaforge/cache/images/<id>-<impronta>-{normal,crop}.svg
                                                               └▶ cards.local_image_{normal,crop}_path
 ```
 
@@ -74,7 +74,7 @@ parole chiave in ordine canonico. Le Fonti base sono le carte esenti dal limite 
   gli `id` interni sono prefissati dall'impronta, così più SVG inline nella stessa pagina non collidono.
 - **Cache:** nome file `<id>-<impronta 12 hex>-<variante>.svg`, impronta = hash di versione algoritmo + seed + identità
   → la cache si invalida da sola. Scrittura atomica (tmp + `rename`); cache hit solo se il DB registra quei percorsi
-  e sono file regolari. Generazione **on-demand** (TRD §4): l'esposizione via API arriva con lo step 2.2.
+  e sono file regolari. Generazione **on-demand** (TRD §4), esposta dallo step 2.2 con `GET /api/cards/:id/image/{normal|crop}` (vedi `UI/01-deckbuilder.md`).
 - **Limite noto:** le immagini orfane (arte cambiata o carta rimossa) restano su disco; la pulizia è rimandata.
 
 ## Contenuto del blocco MF1

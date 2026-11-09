@@ -11,7 +11,7 @@ import { AuthResponseSchema, GoogleResultResponseSchema, type AuthResponse } fro
 import { buildApp } from '../../src/app.js';
 import { createGoogleOAuth } from '../../src/auth/google-oauth.js';
 import { AUTH_RATE_LIMIT_PER_MINUTE } from '../../src/routes/auth.js';
-import { createFakeGoogleFetch, createTestContext, type FakeGoogleUser, type TestContext } from '../helpers/test-context.js';
+import { appDeps, createFakeGoogleFetch, createTestContext, type FakeGoogleUser, type TestContext } from '../helpers/test-context.js';
 
 const ORIGIN = 'http://localhost:5173';
 const credentials = { email: 'ada@example.com', username: 'Ada', password: 'password-sicura' };
@@ -30,7 +30,7 @@ describe('rotte /api/auth', () => {
             config: { clientId: 'cid', redirectUri: 'http://127.0.0.1:47821/api/auth/google/callback' },
             fetch: createFakeGoogleFetch('google' in options ? options.google : googleUser).fetch,
           });
-    app = await buildApp({ auth: ctx.auth, tokens: ctx.tokens, google, allowedOrigins: [ORIGIN] });
+    app = await buildApp({ ...appDeps(ctx), google, allowedOrigins: [ORIGIN] });
   };
 
   afterEach(async () => {

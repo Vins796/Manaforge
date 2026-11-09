@@ -8,7 +8,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { BODY_LIMIT_BYTES, buildApp } from '../src/app.js';
-import { createTestContext, type TestContext } from './helpers/test-context.js';
+import { appDeps, createTestContext, type TestContext } from './helpers/test-context.js';
 
 describe('buildApp', () => {
   let ctx: TestContext;
@@ -16,7 +16,7 @@ describe('buildApp', () => {
 
   const setup = async (overrides: Partial<TestContext['auth']> = {}) => {
     ctx = createTestContext();
-    app = await buildApp({ auth: { ...ctx.auth, ...overrides }, tokens: ctx.tokens, google: null, allowedOrigins: ['http://localhost:5173'] });
+    app = await buildApp({ ...appDeps(ctx), auth: { ...ctx.auth, ...overrides }, google: null, allowedOrigins: ['http://localhost:5173'] });
   };
 
   afterEach(async () => {

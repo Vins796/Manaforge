@@ -1,14 +1,20 @@
 /**
  * @nature [TEST]
  * @module TestContext
- * @description Fixture condivise dei test del server: DB in-memory, servizi reali e fetch Google simulato.
+ * @description Fixture condivise dei test del server: DB in-memory, servizi e repository reali, cache immagini temporanea e fetch Google simulato.
  * @relatedDocs docs/catalog/TEST/03-auth-tests.md
  * @testFile apps/server/tests/routes/auth.test.ts
  */
+import { randomUUID } from 'node:crypto';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { unwrap } from '@manaforge/shared';
 import { createAuthService, type AuthService } from '../../src/auth/auth-service.js';
 import { createTokenService, type TokenService } from '../../src/auth/token-service.js';
+import { createImageCache, type ImageCache } from '../../src/catalog/image-cache.js';
+import { createCardRepository, type CardRepository } from '../../src/db/card-repository.js';
 import { IN_MEMORY, openDatabase, type DatabaseConnection } from '../../src/db/db-client.js';
+import { createDeckRepository, type DeckRepository } from '../../src/db/deck-repository.js';
 import { createUserRepository, type UserRepository } from '../../src/db/user-repository.js';
 
 /** Segreto JWT deterministico per i test (64 byte). */
@@ -20,6 +26,11 @@ export interface TestContext {
   readonly users: UserRepository;
   readonly tokens: TokenService;
   readonly auth: AuthService;
+  readonly cards: CardRepository;
+  readonly decks: DeckRepository;
+  /** Cache immagini su una cartella temporanea univoca (creata solo se si generano immagini). */
+  readonly imageCache: ImageCache;
+  readonly cacheDir: string;
 }
 
 /**
@@ -31,8 +42,27 @@ export const createTestContext = (): TestContext => {
   const conn = unwrap(openDatabase({ filename: IN_MEMORY }));
   const users = createUserRepository(conn.db);
   const tokens = createTokenService({ secret: TEST_SECRET });
-  return { conn, users, tokens, auth: createAuthService({ users, tokens }) };
+  const cards = createCardRepository(conn.db);
+  const cacheDir = join(tmpdir(), `manaforge-test-cache-${randomUUID()}`);
+  return {
+    conn,
+    users,
+    tokens,
+    auth: createAuthService({ users, tokens }),
+    cards,
+    decks: createDeckRepository(conn.db),
+    imageCache: createImageCache({ cards, cacheDir }),
+    cacheDir,
+  };
 };
+
+/**
+ * Dipendenze di `buildApp` ricavate dal contesto (senza Google né origini).
+ *
+ * @param ctx - Contesto di test.
+ * @returns Servizi e repository da passare a `buildApp`.
+ */
+export const appDeps = ({ auth, tokens, cards, decks, imageCache }: TestContext) => ({ auth, tokens, cards, decks, imageCache });
 
 /** Profilo restituito dal finto endpoint userinfo. */
 export interface FakeGoogleUser {

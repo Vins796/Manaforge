@@ -13,19 +13,18 @@ import { App } from './App.js';
 import { createApiClient, DEFAULT_API_BASE_URL } from './services/api-client.js';
 import { createOpenExternal } from './services/external-browser.js';
 import { createAuthStore } from './store/use-auth-store.js';
+import { createDeckStore } from './store/use-deck-store.js';
 import './styles.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Elemento #root mancante in index.html');
 
-const store = createAuthStore({
-  api: createApiClient({ baseUrl: import.meta.env.VITE_API_URL ?? DEFAULT_API_BASE_URL }),
-  openExternal: createOpenExternal(),
-  storage: window.localStorage,
-});
+const api = createApiClient({ baseUrl: import.meta.env.VITE_API_URL ?? DEFAULT_API_BASE_URL });
+const store = createAuthStore({ api, openExternal: createOpenExternal(), storage: window.localStorage });
+const deckStore = createDeckStore({ api, getToken: () => store.getState().token });
 
 createRoot(root).render(
   <StrictMode>
-    <App store={store} />
+    <App store={store} deckStore={deckStore} />
   </StrictMode>,
 );

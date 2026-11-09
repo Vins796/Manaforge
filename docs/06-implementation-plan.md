@@ -23,7 +23,7 @@
     generatore di illustrazioni procedurali SVG con salvataggio in cache su disco.
   * *Test richiesto:* `catalog-sync.test.ts` che importa un batch di carte di prova e verifica il salvataggio in cache dell'immagine.
   * *Doc richiesta:* `docs/catalog/DATA/02-card-catalog-and-image-cache.md`.
-* `[ ]` **Step 2.2 — API Mazzi, Parser Import/Export Testuale e UI Deckbuilder (`[API]` + `[UI]`)**
+* `[x]` **Step 2.2 — API Mazzi, Parser Import/Export Testuale e UI Deckbuilder (`[API]` + `[UI]`)**
   * *Task:* CRUD mazzi, parser per il formato testuale (es. `4 Scintilla Rovente`) e interfaccia grafica `/decks` e `/collection` con filtri affinità/mana.
   * *Test richiesto:* test del parser di import/export + validazione regole di costruzione mazzo (min 60 carte, max 4 copie salvo Fonti base).
   * *Doc richiesta:* `docs/catalog/UI/01-deckbuilder.md`.
@@ -76,3 +76,4 @@
 | 1.2 | 2026-11-09 | `pnpm verify` | `apps/server/tests/db/{db-schema,db-client,db-paths}.test.ts` (+ suite 1.1), 11 file | 34 | ✅ 34/34, `tsc -b` verde | 100% stmt/func/lines, 94.7% branch | Drizzle 0.45.4 + better-sqlite3 13.0.3, migrazione `0000_init` |
 | 1.3 | 2026-11-09 | `pnpm verify` + E2E manuale Playwright | 31 file (server 15, client 11, shared 5): `apps/server/tests/routes/auth.test.ts` (API), `auth-service`, `google-oauth`, `LoginPage`, `use-auth-store`… | 160 | ✅ 160/160, `tsc -b` verde, build Vite ok | 99.5% stmt, 98.2% branch | Flusso reale verificato: redirect /home→/login, registrazione, ripristino sessione, 401, Google non configurato; 0 violazioni CSP |
 | 2.1 | 2026-11-09 | `pnpm verify` | 41 file: `apps/server/tests/catalog/{catalog-sync,card-catalog,art-generator,image-cache}.test.ts`, `db/card-repository`, `packages/shared/tests/schemas/{card,mana-cost}`, `constants/keywords`… | 250 | ✅ 250/250, `tsc -b` verde | 99.7% stmt, 97.7% branch | Blocco MF1 (48 carte originali), versione `v1-<sha256>`, SVG procedurali deterministici in `~/.manaforge/cache/images`; branch `feat/2.1-card-catalog` |
+| 2.2 | 2026-11-09 | `pnpm verify` + verifica manuale nel browser | 60 file: `packages/shared/tests/schemas/{deck-list,deck}.test.ts` (parser + regole), `apps/server/tests/routes/{decks,cards,require-auth}.test.ts`, `db/deck-repository`, client `pages/{Deckbuilder,DeckList,Collection}Page`, `store/use-deck-store`, componenti UI… | 374 | ✅ 374/374, `tsc -b` verde | 99.8% stmt, 97.1% branch | CRUD `/api/decks` + `/parse`, `GET /api/cards` e illustrazioni SVG; UI `/collection`, `/decks`, `/decks/:id`; branch `feat/2.2-deckbuilder` |

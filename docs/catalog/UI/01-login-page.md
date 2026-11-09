@@ -5,7 +5,7 @@
 | Modulo | Ruolo | Test |
 |---|---|---|
 | `pages/LoginPage.tsx` | Tab Accedi/Registrati (ARIA `tablist`), validazione Zod lato client, conferma password, errore server in `role="alert"`, "Continua con Google" con stato di attesa e "Annulla" | `tests/pages/LoginPage.test.tsx` |
-| `pages/HomeHub.tsx` | Home minima: barra superiore, benvenuto, "Esci" (Play Blade dalla Fase 2) | `tests/pages/HomeHub.test.tsx` |
+| `pages/HomeHub.tsx` | Home minima: barra superiore, benvenuto, "Esci" (dallo step 2.2 usa `TopNav` con link a Mazzi e Collezione; Play Blade nella Fase 4) | `tests/pages/HomeHub.test.tsx` |
 | `App.tsx` | Provider dello store, `restore()` all'avvio, splash, guardia `RequireAuth`, router creato una sola volta | `tests/App.test.tsx` |
 | `store/use-auth-store.ts` | Store Zustand vanilla iniettabile (`createAuthStore`), provider + hook `useAuthStore(selector)`; stati `restoring → anonymous ⇄ authenticating / awaiting-google → authenticated` | `tests/store/use-auth-store.test.tsx` |
 | `services/api-client.ts` | `fetch` con timeout 10 s, risposte validate con Zod, errori come `Result` (`NETWORK_ERROR`, `HTTP_ERROR`, `INVALID_RESPONSE`) | `tests/services/api-client.test.ts` |

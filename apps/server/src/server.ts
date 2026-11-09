@@ -15,9 +15,12 @@ import { loadOrCreateJwtSecret } from './auth/jwt-secret.js';
 import { createTokenService } from './auth/token-service.js';
 import { BUNDLED_CATALOG_SOURCES, parseCatalogSources } from './catalog/card-catalog.js';
 import { syncCatalog } from './catalog/catalog-sync.js';
+import { createImageCache } from './catalog/image-cache.js';
 import type { ServerConfig } from './config.js';
 import { openDatabase } from './db/db-client.js';
+import { createCardRepository } from './db/card-repository.js';
 import { resolveDataPaths } from './db/db-paths.js';
+import { createDeckRepository } from './db/deck-repository.js';
 import { createUserRepository } from './db/user-repository.js';
 
 /** Nome del file del segreto JWT nella cartella dati. */
@@ -74,7 +77,17 @@ export const startServer = async ({ homeDir, config, logger = false, fetch, cata
     ? createGoogleOAuth({ config: { ...config.google, redirectUri }, ...(fetch ? { fetch } : {}) })
     : null;
 
-  const app = await buildApp({ auth, tokens, google, allowedOrigins: config.allowedOrigins, logger });
+  const cards = createCardRepository(conn.value.db);
+  const app = await buildApp({
+    auth,
+    tokens,
+    google,
+    cards,
+    decks: createDeckRepository(conn.value.db),
+    imageCache: createImageCache({ cards, cacheDir: paths.value.imageCacheDir }),
+    allowedOrigins: config.allowedOrigins,
+    logger,
+  });
   app.log.info({ catalog: synced.value }, 'Catalogo carte sincronizzato');
   try {
     const url = await app.listen({ host: config.host, port: config.port });
