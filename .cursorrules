@@ -24,6 +24,8 @@ Monorepo modulare con **pnpm workspaces**. Ogni file risiede esclusivamente nell
 ```text
 manaforge/
 ├── .cursorrules                    # Regole globali per l'Agente AI (questo file)
+├── .claude/skills/                 # Skills per agenti AI installate con `npx skills add` (non modificare a mano)
+├── skills-lock.json                # Lockfile delle skills (origine + hash)
 ├── package.json                    # Root workspace configuration
 ├── pnpm-workspace.yaml             # Elenco dei workspace pnpm
 ├── tsconfig.base.json              # Configurazione TypeScript condivisa
