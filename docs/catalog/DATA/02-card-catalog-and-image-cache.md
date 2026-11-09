@@ -6,7 +6,7 @@
 
 ## Flusso
 ```text
-mf1-prima-fusione.json ──Zod──▶ CardCatalog ──toCardRecord──▶ CardRecord[] ──hash──▶ version
+mf1-prima-fusione.json + mf2-correnti-astrali.json ──Zod──▶ CardCatalog ──toCardRecord──▶ CardRecord[] ──hash──▶ version
                                                                    │
 startServer ─▶ syncCatalog(db, catalog) ─▶ tabella `cards` (catalog_version = version)
                                                                    │
@@ -22,6 +22,7 @@ startServer ─▶ syncCatalog(db, catalog) ─▶ tabella `cards` (catalog_vers
 | `shared/schemas/mana-cost.ts` | `parseManaCost` → generico, simboli, valore di mana, affinità; `affinitiesInText`; `ManaCostSchema` | `tests/schemas/mana-cost.test.ts` |
 | `shared/schemas/card.ts` | `CardDefinitionSchema`, `CardCatalogSchema`, `toCardRecord`, `formatTypeLine`, `CARD_RARITIES`, `CARD_TYPES` | `tests/schemas/card.test.ts` |
 | `server/catalog/mf1-prima-fusione.json` | blocco **MF1 — Prima Fusione** (48 carte) | `tests/catalog/card-catalog.test.ts` |
+| `server/catalog/mf2-correnti-astrali.json` | blocco **MF2 — Correnti Astrali** (64 carte) | `tests/catalog/card-catalog.test.ts` |
 | `server/catalog/card-catalog.ts` | `parseCatalogSources`, `loadBundledCatalog`, `computeCatalogVersion` | `tests/catalog/card-catalog.test.ts` |
 | `server/catalog/catalog-sync.ts` | `syncCatalog(db, catalog)` → `CatalogSyncReport` | `tests/catalog/catalog-sync.test.ts` |
 | `server/catalog/art-generator.ts` | `generateCardArt({ artSeed, affinityIdentity })` → SVG intero + ritaglio | `tests/catalog/art-generator.test.ts` |
@@ -67,16 +68,34 @@ parole chiave in ordine canonico. Le Fonti base sono le carte esenti dal limite 
 
 ## Illustrazioni procedurali
 - **Deterministiche:** PRNG `sfc32` inizializzato da `SHA-256("<versione>:<artSeed>")`; palette dai colori dell'identità
-  (`MANA_COLORS`, incolore se vuota, due colori se multi-affinità).
-- **Scena 630×880 (63:88):** cielo sfumato, alone, particelle, tre crinali, sigillo poligonale, vignettatura.
+  (`MANA_COLORS`, incolore se vuota, due colori se multi-affinità). Algoritmo alla **versione 2** (`ART_GENERATOR_VERSION`).
+- **Input:** `artSeed`, `affinityIdentity`, `typeLine` e `keywords` (letti dalla riga `cards` da `ImageCache`).
+- **Scena 630×880 (63:88):** cielo sfumato, alone, atmosfera, tre crinali, soggetto, vignettatura.
+- **Atmosfera per affinità principale:** Alba raggi di luce · Marea onde e bolle · Ombra luna eclissata e nebbia ·
+  Fiamma braci e scintille · Selva foglie · incolore schegge geometriche.
+- **Soggetto per tipo** (`artSubject`): Creatura → sagoma · Fonte/Fonte base → cristalli con fascio di luce ·
+  Rituale → cerchio runico con stella · Rapido → fulmini · Artefatto → ingranaggio con gemma · tipo assente → sigillo (stile v1).
+- **Sagome delle creature** (`creatureFamily`, dal primo sottotipo riconosciuto): umanoide (testa tonda, cornuta o con cresta),
+  bestia quadrupede (Lupo, Orso, Drago, Ragno…), serpente (Serpente, Leviatano, Idra, Medusa), volatile (Uccello, Grifone,
+  Fenice, Pipistrello: sempre con ali), costrutto (Costrutto, Golem, Elementale). Con **Alato** umanoidi e bestie hanno le ali.
+  Un nuovo sottotipo senza famiglia ricade su umanoide: per dargli una sagoma basta aggiungerlo a `FAMILY_BY_SUBTYPE`.
   Il ritaglio `crop` è la stessa scena con `viewBox` 4:3 centrato (`0 204 630 472`) per `CardCompactView`.
 - **Sicurezza:** nessun testo della carta entra nell'SVG (solo numeri e colori fissi), niente script né riferimenti esterni;
   gli `id` interni sono prefissati dall'impronta, così più SVG inline nella stessa pagina non collidono.
-- **Cache:** nome file `<id>-<impronta 12 hex>-<variante>.svg`, impronta = hash di versione algoritmo + seed + identità
+- **Cache:** nome file `<id>-<impronta 12 hex>-<variante>.svg`, impronta = hash di versione algoritmo + seed + identità + riga del tipo + ali
   → la cache si invalida da sola. Scrittura atomica (tmp + `rename`); cache hit solo se il DB registra quei percorsi
   e sono file regolari. Generazione **on-demand** (TRD §4), esposta dallo step 2.2 con `GET /api/cards/:id/image/{normal|crop}` (vedi `UI/01-deckbuilder.md`).
 - **Limite noto:** le immagini orfane (arte cambiata o carta rimossa) restano su disco; la pulizia è rimandata.
 
-## Contenuto del blocco MF1
+## Contenuto dei blocchi
+
+### MF1 — Prima Fusione (48 carte)
 5 Fonti base (una per affinità) + 1 Fonte incolore, 7–8 carte per affinità, 3 incolori, 3 multi-affinità; tutte le
 11 parole chiave sono usate almeno una volta. Include le carte citate dai test di regole (*Scintilla Rovente*, *Vigore della Selva*).
+
+### MF2 — Correnti Astrali (64 carte)
+5 Fonti doppie non base (`Entra in campo esaurita. Esaurisci: aggiungi {X} o {Y}.`) per le coppie alleate Alba–Marea,
+Marea–Ombra, Ombra–Fiamma, Fiamma–Selva, Selva–Alba; 10 carte per affinità (6 creature, 4 magie: rimozioni, pesca,
+potenziamenti, pedine, effetti di massa); 4 incolori (2 Costrutti, 2 Artefatti); 5 creature multi-affinità sulle stesse
+coppie delle Fonti doppie. Usa tutte le 11 parole chiave; nessuna nuova Fonte base. Gli effetti senza script automatico
+saranno gestiti dal resolver Sandbox dello step 3.4.

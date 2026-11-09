@@ -18,9 +18,10 @@ import {
   type Result,
 } from '@manaforge/shared';
 import mf1PrimaFusione from './mf1-prima-fusione.json' with { type: 'json' };
+import mf2CorrentiAstrali from './mf2-correnti-astrali.json' with { type: 'json' };
 
 /** Blocchi distribuiti con l'applicazione, nell'ordine di pubblicazione. */
-export const BUNDLED_CATALOG_SOURCES: readonly unknown[] = Object.freeze([mf1PrimaFusione]);
+export const BUNDLED_CATALOG_SOURCES: readonly unknown[] = Object.freeze([mf1PrimaFusione, mf2CorrentiAstrali]);
 
 /** Catalogo validato e pronto per l'import. */
 export interface LoadedCatalog {
